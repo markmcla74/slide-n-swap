@@ -39,40 +39,64 @@
                 <div class="tile tile-empty" data-tile-id="7"><div class="character-slot"></div></div>
             </div>
 
-            <div class="jewel-row" id="jewel-track">
-                <div class="jewel"></div>
-                <div class="jewel"></div>
-                <div class="jewel"></div>
-                <div class="jewel"></div>
-                <div class="jewel"></div>
-                <div class="jewel"></div>
-                <div class="jewel"></div>
-                <div class="jewel"></div>
-                <div class="jewel"></div>
-                <div class="jewel"></div>
+            <div class="jewel-dashboard-row">
+                <button id="btn-eye-solution" class="track-action-btn" title="Show Solution">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+
+                <div class="jewel-track" id="jewel-track">
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                    <div class="jewel"></div>
+                </div>
+
+                <button id="btn-menu-trigger" class="track-action-btn" title="Game Menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                        <line x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                </button>
             </div>
         </div>
 
-        <div class="controls-container">
-            <button id="btn-reset" class="btn btn-danger">Reset</button>
+        <div class="menu-overlay" id="menu-overlay">
+            <div class="menu-card">
+                <h2 class="menu-title">Game Options</h2>
 
-            <div id="btn-scramble" class="scramble-master-container">
-                <span class="scramble-label">Scramble</span>
-                <div class="difficulty-icons">
-                    <button class="icon-sub-btn" id="scramble-easy" title="Easy">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#2ecc71"/></svg>
-                    </button>
-                    <button class="icon-sub-btn" id="scramble-medium" title="Medium">
-                        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#35a7ff"/></svg>
-                    </button>
-                    <button class="icon-sub-btn" id="scramble-hard" title="Hard">
-                        <svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#e74c3c"/></svg>
-                    </button>
+                <div class="menu-button-stack">
+                    <button id="menu-btn-continue" class="menu-btn btn-prime">Continue</button>
+
+                    <button id="menu-btn-reset" class="menu-btn btn-danger">Reset Board</button>
+
+                    <div class="menu-scramble-wrapper">
+                        <span class="scramble-mini-label">Scramble</span>
+                        <div class="scramble-icons-row">
+                            <button class="scramble-target-btn" id="scramble-easy" title="Easy Scramble">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#2ecc71"/></svg>
+                            </button>
+                            <button class="scramble-target-btn" id="scramble-medium" title="Medium Scramble">
+                                <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#35a7ff"/></svg>
+                            </button>
+                            <button class="scramble-target-btn" id="scramble-hard" title="Hard Scramble">
+                                <svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#e74c3c"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="menu-btn-info" class="menu-btn btn-info">Info &amp; Rules</button>
                 </div>
             </div>
-
-            <button id="btn-solution" class="btn btn-secondary">Show Solution</button>
-            <button id="btn-info" class="btn btn-info">Info</button>
         </div>
 
     </div>
