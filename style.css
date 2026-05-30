@@ -1,0 +1,246 @@
+/* Reset default margins and handle absolute layout centering */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Master alignment column */
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+}
+
+/* Optimized landscape container (Locks to an exact 2:1 ratio for the 4x2 grid) */
+.game-container {
+    position: relative;
+    width: 70vw;
+    height: 40vw;
+    max-height: 70vh;
+    max-width: 130vh;
+    background: #2a2a2a;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* 2 Rows, 4 Columns Grid layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 12px;
+    flex: 1;
+    width: 100%;
+}
+
+/* Skinny Jewel Row Container */
+.jewel-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 24px;
+}
+
+.jewel {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #444444;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Base Tile Styling - FIXED & STATIC */
+.tile {
+    position: relative;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    user-select: none;
+    cursor: default;
+}
+
+.tile-1 { background-color: #ff5964; }
+.tile-2 { background-color: #f7b05b; }
+.tile-3 { background-color: #f5f35c; }
+.tile-4 { background-color: #35a7ff; }
+.tile-5 { background-color: #38b000; }
+.tile-6 { background-color: #9d4edd; }
+.tile-7 { background-color: #00f5d4; }
+
+.tile-empty {
+    background-color: #ffffff;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Character Token Styling --- */
+.character-slot {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.character-slot:active {
+    transform: scale(0.92);
+}
+
+/* --- Pac-Man Wrap-Around Door Structural Cutouts --- */
+.door {
+    position: absolute;
+    width: 16px;
+    height: 22%;
+    background-color: #1a1a1a;
+    z-index: 10;
+}
+
+.door-top { top: 11%; }
+.door-bottom { bottom: 19%; }
+.door-left { left: -8px; border-radius: 0 6px 6px 0; }
+.door-right { right: -8px; border-radius: 6px 0 0 6px; }
+
+/* --- Vibrant Thick Neon Edge Visuals --- */
+.door-top.door-left { border-right: 4px solid #ff007f; filter: drop-shadow(2px 0px 6px #ff007f); }
+.door-top.door-right { border-left: 4px solid #ff007f; filter: drop-shadow(-2px 0px 6px #ff007f); }
+.door-bottom.door-left { border-right: 4px solid #00f5d4; filter: drop-shadow(2px 0px 6px #00f5d4); }
+.door-bottom.door-right { border-left: 4px solid #00f5d4; filter: drop-shadow(-2px 0px 6px #00f5d4); }
+
+/* --- Fixed 10-Column Symmetrical Grid Toolbar --- */
+.controls-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* 10 equal columns */
+    align-items: center;
+    width: 70vw;
+    max-width: 130vh;
+    padding: 0 16px; /* Padding exactly matches the .game-container padding for flawless alignment */
+    gap: 12px;
+}
+
+/* Standard Base Button Architecture */
+.btn {
+    width: 100%; /* Spans the full width of its designated grid tracks */
+    height: 46px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s ease, filter 0.15s ease;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.btn:active { transform: scale(0.95); }
+.btn:hover { filter: brightness(1.1); }
+.btn-danger { background-color: #ff5964; }
+.btn-secondary { background-color: #6c757d; }
+.btn-info { background-color: #4a6fa5; }
+
+/* Grid Track Assignments (2 + 3 + 3 + 2 = 10 Total Units) */
+#btn-reset {
+grid-column: span 2; /* 20% width */
+}
+
+.scramble-master-container {
+    grid-column: span 3; /* 30% width — Exactly 1.5x width of Reset */
+    height: 46px;
+    background-color: #242424;
+    border: 3px solid #f7b05b;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#btn-solution {
+grid-column: span 3; /* 30% width */
+}
+
+#btn-info {
+grid-column: span 2; /* 20% width */
+}
+
+/* --- Internal Scramble Formatting --- */
+.scramble-label {
+    color: #f7b05b;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    user-select: none;
+}
+
+.difficulty-icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.icon-sub-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s ease, filter 0.1s;
+    padding: 0;
+}
+
+.icon-sub-btn:hover { filter: brightness(1.25); }
+.icon-sub-btn:active { transform: scale(0.85); }
+.icon-sub-btn svg { width: 100%; height: 100%; }
+
+/* --- High-Contrast Universal Home-Glow System --- */
+.character-slot.at-home {
+    animation: homeGlowPulse 1.6s infinite ease-in-out;
+}
+
+.character-slot.at-home .animal-svg {
+    transform: scale(1.04);
+}
+
+@keyframes homeGlowPulse {
+    0%, 100% {
+        box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
+        border-radius: 8px;
+    }
+    50% {
+        box-shadow: inset 0 0 26px rgba(0, 0, 0, 0.9);
+        border-radius: 8px;
+    }
+}

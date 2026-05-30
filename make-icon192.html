@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate High-Contrast Icon-192</title>
+    <style>
+        body { background: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; }
+        canvas { border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        button { padding: 12px 24px; font-size: 1rem; font-weight: bold; background: #00f5d4; color: #1a1a1a; border: none; border-radius: 8px; cursor: pointer; }
+        button:hover { filter: brightness(1.1); }
+    </style>
+</head>
+<body>
+
+    <canvas id="iconCanvas" width="192" height="192"></canvas>
+    <button onclick="downloadIcon()">Save Icon as PNG</button>
+
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 1. Background Base
+        ctx.fillStyle = '#2a2a2a';
+        ctx.fillRect(0, 0, 192, 192);
+
+        // 2. Four Balanced Tiles (Scaled for 192x192 footprint)
+        // Dimensions: 80x80px tiles with a 12px center gutter gap
+        ctx.fillStyle = '#ff5964'; drawRoundedRect(ctx, 12, 12, 80, 80, 6);
+        ctx.fillStyle = '#f7b05b'; drawRoundedRect(ctx, 100, 12, 80, 80, 6);
+        ctx.fillStyle = '#35a7ff'; drawRoundedRect(ctx, 12, 100, 80, 80, 6);
+        ctx.fillStyle = '#00f5d4'; drawRoundedRect(ctx, 100, 100, 80, 80, 6);
+
+        // 3. Vertical One-Way Arrow (Orange down to Teal)
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // --- STEP A: Black Outline ---
+        ctx.strokeStyle = '#000000';
+        ctx.fillStyle = '#000000';
+        ctx.lineWidth = 11; // Enhanced relative width for small scale clarity
+        ctx.beginPath();
+        ctx.moveTo(140, 32);
+        ctx.lineTo(140, 110);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(140, 124);
+        ctx.lineTo(124, 100);
+        ctx.lineTo(156, 100);
+        ctx.closePath();
+        ctx.fill();
+
+        // --- STEP B: White Core ---
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillStyle = '#ffffff';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(140, 32);
+        ctx.lineTo(140, 110);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(140, 118);
+        ctx.lineTo(129, 103);
+        ctx.lineTo(151, 103);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+
+        // 4. Diagonal Two-Way Arrow (Red to Teal Across Center)
+        ctx.save();
+        ctx.translate(96, 96); // Shift origin to 192px exact center
+        ctx.rotate(Math.PI / 4);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // --- STEP A: Black Outline ---
+        ctx.strokeStyle = '#000000';
+        ctx.fillStyle = '#000000';
+        ctx.lineWidth = 13;
+        ctx.beginPath();
+        ctx.moveTo(-42, 0);
+        ctx.lineTo(42, 0);
+        ctx.stroke();
+
+        ctx.beginPath(); ctx.moveTo(56, 0); ctx.lineTo(34, -13); ctx.lineTo(34, 13); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(-56, 0); ctx.lineTo(-34, -13); ctx.lineTo(-34, 13); ctx.closePath(); ctx.fill();
+
+        // --- STEP B: White Core ---
+        ctx.strokeStyle = '#ffffff';
+        ctx.fillStyle = '#ffffff';
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.moveTo(-42, 0);
+        ctx.lineTo(42, 0);
+        ctx.stroke();
+
+        ctx.beginPath(); ctx.moveTo(51, 0); ctx.lineTo(36, -9); ctx.lineTo(36, 9); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(-51, 0); ctx.lineTo(-36, -9); ctx.lineTo(-36, 9); ctx.closePath(); ctx.fill();
+        ctx.restore();
+
+
+        function drawRoundedRect(xCtx, x, y, width, height, radius) {
+            xCtx.beginPath();
+            xCtx.moveTo(x + radius, y);
+            xCtx.lineTo(x + width - radius, y);
+            xCtx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            xCtx.lineTo(x + width, y + height - radius);
+            xCtx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            xCtx.lineTo(x + radius, y + height);
+            xCtx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            xCtx.lineTo(x, y + radius);
+            xCtx.quadraticCurveTo(x, y, x + radius, y);
+            xCtx.closePath();
+            xCtx.fill();
+
+            // Subtle 3D shadow lip tailored for lower density scale
+            xCtx.fillStyle = 'rgba(0,0,0,0.15)';
+            xCtx.fillRect(x, y + height - 4, width, 4);
+        }
+
+        function downloadIcon() {
+            const link = document.createElement('a');
+            link.download = 'icon-192.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

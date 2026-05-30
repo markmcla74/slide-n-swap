@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+ <script>
+  // Register the service worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js');
+    });
+  }
+ </script>
+    <title>Slide 'n Swap</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-wrapper">
+
+        <div class="game-container">
+            <div class="door door-left door-top"></div>
+            <div class="door door-right door-top"></div>
+            <div class="door door-left door-bottom"></div>
+            <div class="door door-right door-bottom"></div>
+
+            <div class="grid" id="game-grid">
+                <div class="tile tile-1" data-tile-id="0"><div class="character-slot"></div></div>
+                <div class="tile tile-2" data-tile-id="1"><div class="character-slot"></div></div>
+                <div class="tile tile-3" data-tile-id="2"><div class="character-slot"></div></div>
+                <div class="tile tile-4" data-tile-id="3"><div class="character-slot"></div></div>
+                <div class="tile tile-5" data-tile-id="4"><div class="character-slot"></div></div>
+                <div class="tile tile-6" data-tile-id="5"><div class="character-slot"></div></div>
+                <div class="tile tile-7" data-tile-id="6"><div class="character-slot"></div></div>
+                <div class="tile tile-empty" data-tile-id="7"><div class="character-slot"></div></div>
+            </div>
+
+            <div class="jewel-row" id="jewel-track">
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+                <div class="jewel"></div>
+            </div>
+        </div>
+
+        <div class="controls-container">
+            <button id="btn-reset" class="btn btn-danger">Reset</button>
+
+            <div id="btn-scramble" class="scramble-master-container">
+                <span class="scramble-label">Scramble</span>
+                <div class="difficulty-icons">
+                    <button class="icon-sub-btn" id="scramble-easy" title="Easy">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#2ecc71"/></svg>
+                    </button>
+                    <button class="icon-sub-btn" id="scramble-medium" title="Medium">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#35a7ff"/></svg>
+                    </button>
+                    <button class="icon-sub-btn" id="scramble-hard" title="Hard">
+                        <svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#e74c3c"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <button id="btn-solution" class="btn btn-secondary">Show Solution</button>
+            <button id="btn-info" class="btn btn-info">Info</button>
+        </div>
+
+    </div>
+
+    <script src="puzzle_library_final.js"></script>
+    <script src="animal_templates.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
