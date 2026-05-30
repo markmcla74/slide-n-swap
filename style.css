@@ -15,49 +15,54 @@ body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Master alignment container - strips out extra vertical padding completely */
 .game-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
+    height: 100%;
 }
 
-/* Landscape board ratio box scales smoothly to edges on mobile views */
+/* THE VERTICAL MAXIMIZER:
+ *  Instead of tracking width, we lock height to 88% of the physical screen height.
+ *  Since the board matrix is a 4x2 grid (a 2:1 ratio), the width becomes exactly double that!
+ */
 .game-container {
     position: relative;
-    width: 92vw; /* Increased scale to reduce wasted empty lateral padding */
-    height: 52vw;
-    max-height: 82vh;
-    max-width: 140vh;
+    height: 88vh;          /* Consumes nearly all vertical screen estate safely */
+    width: 176vh;          /* Mathematically locked 2:1 aspect ratio asset box (88 * 2) */
+    max-width: 96vw;       /* Safety guardrail so it doesn't bleed off the sides on ultra-narrow phones */
+
     background: #2a2a2a;
-    padding: 16px;
-    border-radius: 16px;
+    padding: 10px;         /* Leaner internal padding to maximize the scale of the inner grid tiles */
+    border-radius: 12px;   /* Slightly tighter corners to match the dense mobile profile */
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;             /* Snug gap between tiles and the jewel track */
 }
 
-/* 2x4 Grid Matrix core geometry */
+/* 2x4 Grid Core - Automatically expands to perfectly soak up the new tall container canvas */
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 12px;
+    gap: 8px;              /* Tighter tile gutters for a massive, clean arcade tile look */
     flex: 1;
     width: 100%;
 }
 
-/* --- Inline Jewel Dashboard Flex-Bar Row --- */
+/* Skinny Jewel Dashboard Row - Sits right at the base with zero wasted margins */
 .jewel-dashboard-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 36px;
+    height: 32px;         /* Trimmed down slightly to protect puzzle tile territory */
     padding: 0 4px;
 }
-
 .jewel-track {
     display: flex;
     justify-content: center;
