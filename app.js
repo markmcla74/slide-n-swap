@@ -58,5 +58,3 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('scramble-medium').addEventListener('click', () => triggerDifficultySelection('Medium'));
     document.getElementById('scramble-hard').addEventListener('click', () => triggerDifficultySelection('Hard'));
 });
-
-
