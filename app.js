@@ -6,6 +6,7 @@
 let boardState = [0, 1, 2, 3, 4, 5, 6, 7];
 let moveCount = 0;
 let activeSolutionSteps = []; // Holds the array elements from column 8 onwards
+let isSolutionVisible = false; // Tracks the "Eye" toggle state
 
 // Maps character IDs directly to our explicit stylesheet classes
 const JEWEL_COLOR_CLASSES = [
@@ -26,41 +27,36 @@ function updateJewelTrack() {
     const isSolved = boardState.every((val, index) => val === index);
 
     // Grab the live step recipe straight out of your database slice
-    // e.g., [2, 0, 5, -1, -1, -1, -1, -1, -1, -1]
     const rawDynamicSolution = findSolutionFromLibrary();
-
-    // 1. Isolate the genuine moves by filtering out the -1 placeholders
     const activeMoves = rawDynamicSolution.filter(move => move !== -1 && move !== '-1');
-
-    // 2. The number of unlit lights is the total track capacity minus our active moves
     const unlitCount = jewels.length - activeMoves.length;
 
-    // 3. Build the 10-element layout map from left to right
+    // Build the 10-element layout map array template from left to right
     let targetLayoutClasses = [];
-
-    // Fill the left side with 'unlit' placeholders
     for (let i = 0; i < unlitCount; i++) {
         targetLayoutClasses.push('unlit');
     }
-
-    // Append the actual chronological color classes on the right side
     activeMoves.forEach((characterColorId) => {
-        const targetColorClass = JEWEL_COLOR_CLASSES[characterColorId];
-        targetLayoutClasses.push(targetColorClass);
+        targetLayoutClasses.push(JEWEL_COLOR_CLASSES[characterColorId]);
     });
 
-    // 4. Paint the physical DOM nodes
+    // Paint the physical DOM nodes cleanly
     jewels.forEach((jewel, index) => {
-        jewel.className = 'jewel'; // Reset baseline classes cleanly
-        jewel.style.opacity = "1.0"; // Full intensity brightness
+        jewel.className = 'jewel'; // Reset previous layout classes
+        jewel.style.opacity = "1.0";
 
         if (isSolved) {
-            // Celebrate the win state!
+            // CRITICAL: Overrides everything! Always flash victorious green when finished
             jewel.classList.add('solved');
         } else {
-            // Match the physical jewel to our pre-padded layout scheme
             const layoutClass = targetLayoutClasses[index];
-            jewel.classList.add(layoutClass);
+
+            // If the slot is supposed to show a color, but the eye is flipped off, mask it!
+            if (layoutClass !== 'unlit' && !isSolutionVisible) {
+                jewel.classList.add('hidden-mode');
+            } else {
+                jewel.classList.add(layoutClass);
+            }
         }
     });
 }
@@ -359,31 +355,134 @@ function triggerDifficultySelection(modeName) {
         rawArray = targetScramble.replace(/[\[\]]/g, '').split(/[\s,]+/).map(Number);
     }
 
-    // --- SEPARATING LAYOUT FROM SOLUTION STEPS ---
-    // First 8 items populate the active matrix configuration
-    boardState = rawArray.slice(0, 8);
-
-    // Everything from index 8 through the end forms the color button solution roadmap!
+    // --- PRE-CALCULATE AND SET THE SOLUTION ---
+    // Extract the solution right away so it's locked in behind the scenes
     activeSolutionSteps = rawArray.slice(8);
+    const finalScrambledState = rawArray.slice(0, 8);
 
+    // --- UI CLEANUP BEFORE ANIMATION ---
     moveCount = 0;
-    renderBoard();
-    updateJewelTrack();
+    isSolutionVisible = false; // Reset eye visibility to blind mode for the fresh puzzle
 
+    const eyeButton = document.getElementById('btn-eye-solution');
+    if (eyeButton) {
+        eyeButton.classList.add('inactive'); // Force it to look unlit
+    }
+
+    // Instantly close the menu dialog overlay so the user can see the board shuffle
     document.getElementById('menu-overlay').classList.remove('active');
-}
 
+    // Temporarily disable tile interactions during the shuffle sequence
+    const boardContainer = document.getElementById('board-container'); // Double check if this matches your wrapper ID
+    if (boardContainer) boardContainer.style.pointerEvents = 'none';
+
+    // --- START THE CINEMATIC SHUFFLE ---
+    let durationCounter = 0;
+    const totalAnimationTime = 2500; // 2.5 seconds feels punchy and fast!
+    const frameIntervalTime = 250;    // How fast characters swap locations (in ms)
+
+    const shuffleInterval = setInterval(() => {
+        // Generate a quick, chaotic array of numbers 0-7 for visual flavor
+        let chaoticState = [];
+        while (chaoticState.length < 8) {
+            let randomId = Math.floor(Math.random() * 8);
+            if (!chaoticState.includes(randomId)) {
+                chaoticState.push(randomId);
+            }
+        }
+
+        // Feed the visual board renderer this fake, chaotic state frame
+        boardState = chaoticState;
+        renderBoard();
+
+        durationCounter += frameIntervalTime;
+
+        // --- THE LAST STEP: DROP IN THE ACTUAL SCRAMBLE ---
+        if (durationCounter >= totalAnimationTime) {
+            clearInterval(shuffleInterval);
+
+            // Plop in the true target puzzle scramble layout
+            boardState = finalScrambledState;
+
+            // Final rendering pass to make everything match perfectly
+            renderBoard();
+            updateJewelTrack();
+
+            // Re-enable player touch interactions now that the shuffle is complete
+            if (boardContainer) boardContainer.style.pointerEvents = 'auto';
+            console.log("Shuffle complete. Real puzzle loaded.");
+        }
+    }, frameIntervalTime);
+}
+// Keep track of whether the player has broken past the first screen launch
+let isFirstLaunch = true;
 window.addEventListener('DOMContentLoaded', () => {
     renderBoard();
     initializeMovementEngine();
 
     const overlay = document.getElementById('menu-overlay');
+    const continueBtn = document.getElementById('menu-btn-continue');
 
-    document.getElementById('btn-eye-solution').addEventListener('click', () => {
-        console.log("Peek at Solution triggered.");
+    // --- FORCE MENU OPEN ON LAUNCH FRAME ---
+    if (isFirstLaunch) {
+        overlay.classList.add('active');
+        continueBtn.innerText = "Explore"; // Swap label for first-time welcome onboarding
+    }
+
+    // Inside your existing Continue/Explore click handler:
+    continueBtn.addEventListener('click', () => {
+        overlay.classList.remove('active');
+
+        // The moment they tap past the first screen, tear down the first-launch flag!
+        if (isFirstLaunch) {
+            isFirstLaunch = false;
+            continueBtn.innerText = "Continue"; // Revert button back to standard gameplay label
+        }
+    });
+
+    // Inside your existing Menu Trigger click handler:
+    document.getElementById('btn-menu-trigger').addEventListener('click', () => {
+        // Double-check to ensure it always says Continue when summoned manually mid-game
+        if (!isFirstLaunch) {
+            continueBtn.innerText = "Continue";
+        }
+        overlay.classList.add('active');
+    });
+    // Inside DOMContentLoaded:
+    const eyeButton = document.getElementById('btn-eye-solution');
+
+    eyeButton.addEventListener('click', () => {
+        // Toggle the visibility state boolean
+        isSolutionVisible = !isSolutionVisible;
+
+        console.log(`Solution Visibility Toggled: ${isSolutionVisible}`);
+
+        // Toggle look of the button to show users it's active/inactive
+        if (isSolutionVisible) {
+            eyeButton.classList.remove('inactive');
+        } else {
+            eyeButton.classList.add('inactive');
+        }
+
+        // Instantly update the jewel track graphics frame
+        updateJewelTrack();
     });
 
     document.getElementById('btn-menu-trigger').addEventListener('click', () => {
+        // 1. Force the cards back to standard layout so rules aren't left stuck open
+        const mainMenuCard = document.getElementById('main-menu-card');
+        const rulesMenuCard = document.getElementById('rules-menu-card');
+
+        if (rulesMenuCard) rulesMenuCard.style.display = 'none';
+        if (mainMenuCard) mainMenuCard.style.display = 'block';
+
+        // 2. Keep your text dynamic if they've already moved past the first launch screen
+        if (!isFirstLaunch) {
+            const continueBtn = document.getElementById('menu-btn-continue');
+            if (continueBtn) continueBtn.innerText = "Continue";
+        }
+
+        // 3. Open the overlay curtain cleanly (Your original line)
         overlay.classList.add('active');
     });
 
@@ -399,6 +498,27 @@ window.addEventListener('DOMContentLoaded', () => {
         updateJewelTrack(); // Clear jewels
         overlay.classList.remove('active');
     });
+    // --- LAYOUT CARD CONTROLLERS ---
+    const mainMenuCard = document.getElementById('main-menu-card');
+    const rulesMenuCard = document.getElementById('rules-menu-card');
+    const infoBtn = document.getElementById('menu-btn-info');
+    const rulesBackBtn = document.getElementById('btn-rules-back');
+
+    // Tap "Info & Rules" -> Hide core selections, reveal rules text block
+    if (infoBtn) {
+        infoBtn.addEventListener('click', () => {
+            mainMenuCard.style.display = 'none';
+            rulesMenuCard.style.display = 'block';
+        });
+    }
+
+    // Tap "Back to Menu" -> Hide rules text block, bring back core dashboard
+    if (rulesBackBtn) {
+        rulesBackBtn.addEventListener('click', () => {
+            rulesMenuCard.style.display = 'none';
+            mainMenuCard.style.display = 'block';
+        });
+    }
 
     document.getElementById('menu-btn-info').addEventListener('click', () => {
         console.log("Rules modal route opened.");

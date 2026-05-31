@@ -40,10 +40,11 @@
             </div>
 
             <div class="jewel-dashboard-row">
-                <button id="btn-eye-solution" class="track-action-btn" title="Show Solution">
+               <button id="btn-eye-solution" class="track-action-btn inactive" title="Toggle Solution Visibility">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                         <circle cx="12" cy="12" r="3"></circle>
+                        <line class="eye-slash-line" x1="3" y1="3" x2="21" y2="21"></line>
                     </svg>
                 </button>
 
@@ -71,33 +72,55 @@
         </div>
 
         <div class="menu-overlay" id="menu-overlay">
-            <div class="menu-card">
-                <h2 class="menu-title">Game Options</h2>
 
-                <div class="menu-button-stack">
-                    <button id="menu-btn-continue" class="menu-btn btn-prime">Continue</button>
+    <div class="menu-card" id="main-menu-card">
+        <h2 class="menu-title">Game Options</h2>
 
-                    <button id="menu-btn-reset" class="menu-btn btn-danger">Reset Board</button>
+        <div class="menu-button-stack">
+            <button id="menu-btn-continue" class="menu-btn btn-prime">Continue</button>
+            <button id="menu-btn-reset" class="menu-btn btn-danger">Reset Board</button>
 
-                    <div class="menu-scramble-wrapper">
-                        <span class="scramble-mini-label">Scramble</span>
-                        <div class="scramble-icons-row">
-                            <button class="scramble-target-btn" id="scramble-easy" title="Easy Scramble">
-                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#2ecc71"/></svg>
-                            </button>
-                            <button class="scramble-target-btn" id="scramble-medium" title="Medium Scramble">
-                                <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#35a7ff"/></svg>
-                            </button>
-                            <button class="scramble-target-btn" id="scramble-hard" title="Hard Scramble">
-                                <svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#e74c3c"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button id="menu-btn-info" class="menu-btn btn-info">Info &amp; Rules</button>
+            <div class="menu-scramble-wrapper">
+                <span class="scramble-mini-label">Scramble</span>
+                <div class="scramble-icons-row">
+                    <button class="scramble-target-btn" id="scramble-easy" title="Easy Scramble">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#2ecc71"/></svg>
+                    </button>
+                    <button class="scramble-target-btn" id="scramble-medium" title="Medium Scramble">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#35a7ff"/></svg>
+                    </button>
+                    <button class="scramble-target-btn" id="scramble-hard" title="Hard Scramble">
+                        <svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#e74c3c"/></svg>
+                    </button>
                 </div>
             </div>
+
+            <button id="menu-btn-info" class="menu-btn btn-info">Info &amp; Rules</button>
         </div>
+    </div>
+
+    <div class="menu-card" id="rules-menu-card" style="display: none;">
+        <h2 class="menu-title">How to Play</h2>
+
+        <div class="menu-button-stack">
+            <ul style="text-align: left; padding-left: 20px; line-height: 1.6; font-size: 14px; margin: 5px 0 20px 0; color: #e0e0e6;">
+                <li style="margin-bottom: 10px;"><strong>Slide &amp; Swap:</strong> Slide characters to empty spots until all characters are home. BUT, when you move a character, its two neighbors swap places.</li>
+                <li style="margin-bottom: 10px;"><strong>Pac-Man Doors:</strong> Moving off the left and right screen edges wraps characters completely around to the opposite edge instantly!</li>
+                <li style="margin-bottom: 10px;"><strong>The Jewel Track:</strong> Puzzles launch blind. Solve from memory or tap the Eye icon to view the optimal pathway.</li>
+            </ul>
+
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; text-align: center;">
+                <p style="margin: 0 0 6px 0; color: #a0a0aa; font-size: 12px;">Theoretical Basis:</p>
+                <a href="https://homepages.gac.edu/~jsiehler/games/slideSwap-start.html" target="_blank" style="color: #35a7ff; text-decoration: none; font-weight: bold;">
+                    Slide &amp; Swap on Cubic Graphs ↗
+                </a>
+            </div>
+
+            <button id="btn-rules-back" class="menu-btn btn-prime">Back to Menu</button>
+        </div>
+    </div>
+
+</div>
 
     </div>
 
