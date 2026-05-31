@@ -189,20 +189,23 @@ margin: 20px 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-
-    /* --- THE VISIBILITY ADJUSTMENTS --- */
-    /* Dropped from 0.75 to 0.35 so the background is a gentle shadow rather than a blackout */
     background-color: rgba(0, 0, 0, 0.35);
-
-    /* Removed the blur completely so the character icons stay tack-sharp behind the menu */
     backdrop-filter: none;
-    -webkit-backdrop-filter: none; /* Clear Safari override */
-
-    /* --- KEEPING EVERYTHING ELSE EXACTLY THE SAME --- */
+    -webkit-backdrop-filter: none;
     z-index: 100;
+
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* --- CHANGED TO FLEX-START WITH PADDING --- */
+    /* This anchors the card near the top and lets it grow downwards naturally */
+    align-items: flex-start;
+    padding: 40px 0;
+
+    /* --- THE SCROLL MAGIC --- */
+    /* If the card is taller than the screen, the backdrop becomes scrollable! */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
+
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -213,7 +216,6 @@ margin: 20px 0;
     opacity: 1;
     pointer-events: auto;
 }
-
 .menu-card {
     background-color: #242424;
     border: 2px solid #444444;
