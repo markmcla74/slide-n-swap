@@ -415,7 +415,22 @@ function triggerDifficultySelection(modeName) {
     }, frameIntervalTime);
 }
 // Keep track of whether the player has broken past the first screen launch
-let isFirstLaunch = true;
+// --- INTERCEPT URL PARAMETERS BEFORE DOM LOADING ---
+const urlParams = new URLSearchParams(window.location.search);
+const shouldRestoreMenu = urlParams.get('menu') === 'open';
+
+if (shouldRestoreMenu) {
+    // If returning from rules, bypass the "Explore" onboarding message
+    // and let the existing listener render the normal "Continue" menu.
+    var isFirstLaunch = false;
+
+    // Clean the URL up so manual page refreshes behave normally later
+    window.history.replaceState({}, document.title, window.location.pathname);
+} else {
+    var isFirstLaunch = true;
+}
+
+//let isFirstLaunch = true;
 window.addEventListener('DOMContentLoaded', () => {
     renderBoard();
     initializeMovementEngine();
