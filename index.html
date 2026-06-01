@@ -71,13 +71,13 @@
             </div>
         </div>
 
-        <div class="menu-overlay" id="menu-overlay">
-
-    <div class="menu-card" id="main-menu-card">
+      <div class="menu-overlay" id="menu-overlay">
+    <div class="menu-card">
         <h2 class="menu-title">Game Options</h2>
 
         <div class="menu-button-stack">
             <button id="menu-btn-continue" class="menu-btn btn-prime">Continue</button>
+
             <button id="menu-btn-reset" class="menu-btn btn-danger">Reset Board</button>
 
             <div class="menu-scramble-wrapper">
@@ -95,31 +95,11 @@
                 </div>
             </div>
 
-            <button id="menu-btn-info" class="menu-btn btn-info">Info &amp; Rules</button>
+            <a href="rules.html" target="_blank" id="menu-btn-info" class="menu-btn btn-info" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                Info &amp; Rules
+            </a>
         </div>
     </div>
-
-    <div class="menu-card" id="rules-menu-card" style="display: none;">
-        <h2 class="menu-title">How to Play</h2>
-
-        <div class="menu-button-stack">
-            <ul style="text-align: left; padding-left: 20px; line-height: 1.6; font-size: 14px; margin: 5px 0 20px 0; color: #e0e0e6;">
-                <li style="margin-bottom: 10px;"><strong>Slide &amp; Swap:</strong> Slide characters to empty spots until all characters are home. BUT, when you move a character, its two neighbors swap places.</li>
-                <li style="margin-bottom: 10px;"><strong>Pac-Man Doors:</strong> Moving off the left and right screen edges wraps characters completely around to the opposite edge instantly!</li>
-                <li style="margin-bottom: 10px;"><strong>The Jewel Track:</strong> Puzzles launch blind. Solve from memory or tap the Eye icon to view the optimal pathway.</li>
-            </ul>
-
-            <div style="background: rgba(0, 0, 0, 0.2); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; text-align: center;">
-                <p style="margin: 0 0 6px 0; color: #a0a0aa; font-size: 12px;">Theoretical Basis:</p>
-                <a href="https://homepages.gac.edu/~jsiehler/games/slideSwap-start.html" target="_blank" style="color: #35a7ff; text-decoration: none; font-weight: bold;">
-                    Slide &amp; Swap on Cubic Graphs ↗
-                </a>
-            </div>
-
-            <button id="btn-rules-back" class="menu-btn btn-prime">Back to Menu</button>
-        </div>
-    </div>
-
 </div>
 
     </div>
