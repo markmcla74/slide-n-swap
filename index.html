@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -71,39 +71,58 @@
             </div>
         </div>
 
-      <div class="menu-overlay" id="menu-overlay">
-    <div class="menu-card">
-        <h2 class="menu-title">Game Options</h2>
+        <div class="menu-overlay" id="menu-overlay">
+            <div class="menu-card">
+                <h2 class="menu-title">Game Options</h2>
 
-        <div class="menu-button-stack">
-            <button id="menu-btn-continue" class="menu-btn btn-prime">Continue</button>
+                <div class="menu-button-stack">
+                    <button id="menu-btn-continue" class="menu-btn btn-prime">Continue</button>
 
-            <button id="menu-btn-reset" class="menu-btn btn-danger">Reset Board</button>
+                    <button id="menu-btn-reset" class="menu-btn btn-danger">Reset Board</button>
 
-            <div class="menu-scramble-wrapper">
-                <span class="scramble-mini-label">Scramble</span>
-                <div class="scramble-icons-row">
-                    <button class="scramble-target-btn" id="scramble-easy" title="Easy Scramble">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#2ecc71"/></svg>
-                    </button>
-                    <button class="scramble-target-btn" id="scramble-medium" title="Medium Scramble">
-                        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#35a7ff"/></svg>
-                    </button>
-                    <button class="scramble-target-btn" id="scramble-hard" title="Hard Scramble">
-                        <svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#e74c3c"/></svg>
-                    </button>
+                    <div class="menu-scramble-wrapper">
+                        <span class="scramble-mini-label">Scramble</span>
+                        <div class="scramble-icons-row">
+                            <button class="scramble-target-btn" id="scramble-easy" title="Easy Scramble">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="#2ecc71"/></svg>
+                            </button>
+                            <button class="scramble-target-btn" id="scramble-medium" title="Medium Scramble">
+                                <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="#35a7ff"/></svg>
+                            </button>
+                            <button class="scramble-target-btn" id="scramble-hard" title="Hard Scramble">
+                                <svg viewBox="0 0 24 24"><polygon points="12,2 22,12 12,22 2,12" fill="#e74c3c"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="menu-btn-info" class="menu-btn btn-info">Info &amp; Rules</button>
                 </div>
             </div>
-
-            <a href="rules.html" target="_blank" id="menu-btn-info" class="menu-btn btn-info" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                Info &amp; Rules
-            </a>
         </div>
+
+    </div>
+    <div id="custom-rules-overlay">
+    <div class="custom-rules-card">
+        <h2 class="custom-rules-title">How to Play</h2>
+
+        <div class="custom-rules-body">
+            <ul>
+                <li><strong>Slide &amp; Swap:</strong> Shift tokens along grid vertices to match their designated home slots.</li>
+                <li><strong>Pac-Man Doors:</strong> Moving off screen edges wraps characters completely around to the opposite edge instantly!</li>
+                <li><strong>The Jewel Track:</strong> Puzzles launch blind. Solve from memory or tap the Eye icon to view the optimal pathway.</li>
+            </ul>
+
+            <div class="custom-rules-footer">
+                <p>Theoretical Basis:</p>
+                <a href="https://homepages.gac.edu/~jsiehler/games/slideSwap-start.html" target="_blank">
+                    Slide &amp; Swap on Cubic Graphs ↗
+                </a>
+            </div>
+        </div>
+
+        <button id="btn-custom-rules-close">Back to Menu</button>
     </div>
 </div>
-
-    </div>
-
     <script src="puzzle_library_final.js"></script>
     <script src="animal_templates.js"></script>
     <script src="app.js"></script>

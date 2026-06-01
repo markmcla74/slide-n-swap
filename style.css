@@ -24,14 +24,7 @@ body {
     width: 100%;
     height: 100%;
 }
-.rules-game-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 70%;
-}
+
 /* THE VERTICAL MAXIMIZER:
  *  Instead of tracking width, we lock height to 88% of the physical screen height.
  *  Since the board matrix is a 4x2 grid (a 2:1 ratio), the width becomes exactly double that!
@@ -46,21 +39,6 @@ body {
     padding: 10px;         /* Leaner internal padding to maximize the scale of the inner grid tiles */
     border-radius: 12px;   /* Slightly tighter corners to match the dense mobile profile */
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;             /* Snug gap between tiles and the jewel track */
-}
-
-.rules-game-container {
-    position: relative;
-    height: 60vh;          /* Consumes nearly all vertical screen estate safely */
-    width: 176vh;          /* Mathematically locked 2:1 aspect ratio asset box (88 * 2) */
-    max-width: 96vw;       /* Safety guardrail so it doesn't bleed off the sides on ultra-narrow phones */
-
-    background: #2a2a2a;
-    padding: 10px;         /* Leaner internal padding to maximize the scale of the inner grid tiles */
-    border-radius: 12px;   /* Slightly tighter corners to match the dense mobile profile */
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     gap: 10px;             /* Snug gap between tiles and the jewel track */
@@ -372,4 +350,89 @@ transition: opacity 0.2s ease, filter 0.2s ease;
 #btn-eye-solution.inactive {
 opacity: 0.4;
 filter: grayscale(1);
+}
+/* Custom Isolated Overlay Container */
+#custom-rules-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dimming */
+z-index: 200; /* Forces it to sit comfortably on top of everything else */
+display: none; /* Hidden by default */
+justify-content: center;
+align-items: center;
+}
+
+/* The Content Card Box */
+.custom-rules-card {
+    background-color: #242424;
+    border: 2px solid #f7b05b; /* Gold accent color match */
+    border-radius: 16px;
+    width: 290px;
+    padding: 20px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.custom-rules-title {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.custom-rules-body ul {
+    text-align: left;
+    padding-left: 18px;
+    line-height: 1.5;
+    font-size: 14px;
+    color: #e0e0e6;
+    margin-bottom: 15px;
+}
+
+.custom-rules-body li {
+    margin-bottom: 10px;
+}
+
+.custom-rules-footer {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.custom-rules-footer p {
+    color: #888888;
+    font-size: 11px;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.custom-rules-footer a {
+    color: #35a7ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Dedicated Dismiss Button styling */
+#btn-custom-rules-close {
+width: 100%;
+height: 44px;
+font-size: 0.95rem;
+font-weight: 600;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+background-color: #35a7ff;
+color: #ffffff;
+transition: transform 0.1s;
+}
+
+#btn-custom-rules-close:active {
+transform: scale(0.97);
 }

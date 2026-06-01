@@ -415,22 +415,7 @@ function triggerDifficultySelection(modeName) {
     }, frameIntervalTime);
 }
 // Keep track of whether the player has broken past the first screen launch
-// --- INTERCEPT URL PARAMETERS BEFORE DOM LOADING ---
-const urlParams = new URLSearchParams(window.location.search);
-const shouldRestoreMenu = urlParams.get('menu') === 'open';
-
-if (shouldRestoreMenu) {
-    // If returning from rules, bypass the "Explore" onboarding message
-    // and let the existing listener render the normal "Continue" menu.
-    var isFirstLaunch = false;
-
-    // Clean the URL up so manual page refreshes behave normally later
-    window.history.replaceState({}, document.title, window.location.pathname);
-} else {
-    var isFirstLaunch = true;
-}
-
-//let isFirstLaunch = true;
+let isFirstLaunch = true;
 window.addEventListener('DOMContentLoaded', () => {
     renderBoard();
     initializeMovementEngine();
@@ -484,20 +469,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('btn-menu-trigger').addEventListener('click', () => {
-        // 1. Force the cards back to standard layout so rules aren't left stuck open
-        const mainMenuCard = document.getElementById('main-menu-card');
-        const rulesMenuCard = document.getElementById('rules-menu-card');
-
-        if (rulesMenuCard) rulesMenuCard.style.display = 'none';
-        if (mainMenuCard) mainMenuCard.style.display = 'block';
-
-        // 2. Keep your text dynamic if they've already moved past the first launch screen
-        if (!isFirstLaunch) {
-            const continueBtn = document.getElementById('menu-btn-continue');
-            if (continueBtn) continueBtn.innerText = "Continue";
-        }
-
-        // 3. Open the overlay curtain cleanly (Your original line)
         overlay.classList.add('active');
     });
 
@@ -513,27 +484,6 @@ window.addEventListener('DOMContentLoaded', () => {
         updateJewelTrack(); // Clear jewels
         overlay.classList.remove('active');
     });
-    // --- LAYOUT CARD CONTROLLERS ---
-    const mainMenuCard = document.getElementById('main-menu-card');
-    const rulesMenuCard = document.getElementById('rules-menu-card');
-    const infoBtn = document.getElementById('menu-btn-info');
-    const rulesBackBtn = document.getElementById('btn-rules-back');
-
-    // Tap "Info & Rules" -> Hide core selections, reveal rules text block
-    if (infoBtn) {
-        infoBtn.addEventListener('click', () => {
-            mainMenuCard.style.display = 'none';
-            rulesMenuCard.style.display = 'block';
-        });
-    }
-
-    // Tap "Back to Menu" -> Hide rules text block, bring back core dashboard
-    if (rulesBackBtn) {
-        rulesBackBtn.addEventListener('click', () => {
-            rulesMenuCard.style.display = 'none';
-            mainMenuCard.style.display = 'block';
-        });
-    }
 
     document.getElementById('menu-btn-info').addEventListener('click', () => {
         console.log("Rules modal route opened.");
@@ -542,4 +492,26 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('scramble-easy').addEventListener('click', () => triggerDifficultySelection('Easy'));
     document.getElementById('scramble-medium').addEventListener('click', () => triggerDifficultySelection('Medium'));
     document.getElementById('scramble-hard').addEventListener('click', () => triggerDifficultySelection('Hard'));
+    // --- SECONDARY COUPLING OVERLAY EVENT LISTENERS ---
+    const customRulesOverlay = document.getElementById('custom-rules-overlay');
+    const infoButtonTrigger = document.getElementById('menu-btn-info');
+    const closeRulesTrigger = document.getElementById('btn-custom-rules-close');
+
+    // Open the new standalone overlay when "Info & Rules" is touched
+    if (infoButtonTrigger) {
+        infoButtonTrigger.addEventListener('click', () => {
+            if (customRulesOverlay) {
+                customRulesOverlay.style.display = 'flex'; // Turn visibility on instantly
+            }
+        });
+    }
+
+    // Hide the new standalone overlay when "Back to Menu" is touched
+    if (closeRulesTrigger) {
+        closeRulesTrigger.addEventListener('click', () => {
+            if (customRulesOverlay) {
+                customRulesOverlay.style.display = 'none'; // Turn visibility off instantly
+            }
+        });
+    }
 });
