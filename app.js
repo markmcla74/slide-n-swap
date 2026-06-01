@@ -501,7 +501,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (infoButtonTrigger) {
         infoButtonTrigger.addEventListener('click', () => {
             if (customRulesOverlay) {
-                customRulesOverlay.style.display = 'flex'; // Turn visibility on instantly
+                customRulesOverlay.style.display = 'block'; // Changed from 'flex' to unlock natural container scrolling
             }
         });
     }

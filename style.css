@@ -352,29 +352,37 @@ opacity: 0.4;
 filter: grayscale(1);
 }
 /* Custom Isolated Overlay Container */
+/* Custom Isolated Overlay Container - Now Scrollable */
 #custom-rules-overlay {
 position: fixed;
 top: 0;
 left: 0;
 width: 100vw;
 height: 100vh;
-background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dimming */
-z-index: 200; /* Forces it to sit comfortably on top of everything else */
-display: none; /* Hidden by default */
-justify-content: center;
-align-items: center;
+background-color: rgba(0, 0, 0, 0.6);
+z-index: 200;
+display: none; /* Controlled by JS */
+
+/* THE FIX: Enable vertical scrolling for the overlay wrapper itself */
+overflow-y: auto;
+-webkit-overflow-scrolling: touch; /* Butter-smooth iOS momentum scrolling */
+padding: 20px 0; /* Ensures the card never hugs the absolute top/bottom edge */
+box-sizing: border-box;
 }
 
-/* The Content Card Box */
+/* The Content Card Box - Shifted to flex margins for safe scrolling scrolling */
 .custom-rules-card {
     background-color: #242424;
-    border: 2px solid #f7b05b; /* Gold accent color match */
+    border: 2px solid #f7b05b;
     border-radius: 16px;
     width: 290px;
     padding: 20px;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
     text-align: center;
     font-family: system-ui, -apple-system, sans-serif;
+
+    /* THE FIX: Automatically centers horizontally, and allows vertical expansion */
+    margin: auto;
 }
 
 .custom-rules-title {
