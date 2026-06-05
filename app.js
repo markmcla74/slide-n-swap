@@ -1,3 +1,125 @@
+// Global Audio Configuration
+const bgAudio = new Audio("background-track.mp3");
+bgAudio.loop = true;
+bgAudio.volume = 0.3; // Kept low so it stays in the background
+
+let isMusicPlaying = false;
+let isVictorySoundPlayed = false; // Prevents the chime from rapid-firing loops
+function playGameMusic() {
+    if (!isMusicPlaying) {
+        bgAudio.play()
+        .then(() => {
+            isMusicPlaying = true;
+            console.log("Background music started successfully.");
+        })
+        .catch(err => {
+            console.log("Audio failed to play:", err);
+        });
+    }
+}
+
+function playSwipeSound() {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+
+    // 1. GENERATE REAL WHITE NOISE (Air texture)
+    const bufferSize = ctx.sampleRate * 0.25; // 0.25 seconds of audio space
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    // Fill the buffer with random values to create pure noise friction
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
+
+    const noiseSource = ctx.createBufferSource();
+    noiseSource.buffer = buffer;
+
+    // 2. FILTER THE NOISE (Shakes off the harshness, leaves the breeze)
+    const filter = ctx.createBiquadFilter();
+    filter.type = "bandpass"; // Only allows a narrow band of frequencies through
+
+    // Sweep the filter frequency down to simulate a passing rush of air
+    filter.frequency.setValueAtTime(1200, now); // Start with a crisp mid-high breeze
+    filter.frequency.exponentialRampToValueAtTime(400, now + 0.22); // Glide down to a soft hum
+    filter.Q.setValueAtTime(3, now); // Keeps the sound focused and smooth
+
+    // 3. SMOOTH VOLUME ENVELOPE (Swells and fades like a real swipe)
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.6, now + 0.05); // Organic 50ms fade-in swell
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22); // Smooth trailing decay
+
+    // Connect the chain: Noise -> Filter -> Volume -> Output
+    noiseSource.connect(filter).connect(gain).connect(ctx.destination);
+
+    noiseSource.start(now);
+    noiseSource.stop(now + 0.23);
+}
+
+// Helper to play a single cascading chime with a customizable pitch factor
+function playSingleChime(pitchMultiplier = 1.0) {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') {
+        ctx.resume();
+    }
+
+    const now = ctx.currentTime;
+    // Bright pentatonic notes: E5, F#5, G#5, B5
+    const baseNotes = [659.25, 739.99, 830.61, 987.77];
+
+    baseNotes.forEach((freq, index) => {
+        // Shift the entire chord up or down based on the multiplier
+        const shiftedFreq = freq * pitchMultiplier;
+        const noteStartTime = now + (index * 0.06); // Fast 60ms roll
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(shiftedFreq, noteStartTime);
+
+        gain.gain.setValueAtTime(0.001, noteStartTime);
+        gain.gain.linearRampToValueAtTime(0.10, noteStartTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, noteStartTime + 0.45); // Snappy ring out
+
+        // Shimmer detune layer
+        const oscDetune = ctx.createOscillator();
+        const gainDetune = ctx.createGain();
+
+        oscDetune.type = "sine";
+        oscDetune.frequency.setValueAtTime(shiftedFreq * 1.004, noteStartTime);
+
+        gainDetune.gain.setValueAtTime(0.001, noteStartTime);
+        gainDetune.gain.linearRampToValueAtTime(0.03, noteStartTime + 0.02);
+        gainDetune.gain.exponentialRampToValueAtTime(0.001, noteStartTime + 0.45);
+
+        osc.connect(gain).connect(ctx.destination);
+        oscDetune.connect(gainDetune).connect(ctx.destination);
+
+        osc.start(noteStartTime);
+        osc.stop(noteStartTime + 0.50);
+        oscDetune.start(noteStartTime);
+        oscDetune.stop(noteStartTime + 0.50);
+    });
+}
+
+// Main victory function that sequences three chimes together
+function playVictoryChime() {
+    // 1. First chime plays at normal pitch
+    playSingleChime(1.0);
+
+    // 2. Second chime plays 280ms later, shifted slightly up (to an F# focus)
+    setTimeout(() => {
+        playSingleChime(1.12);
+    }, 280);
+
+    // 3. Third chime plays 560ms later, resolved higher (to a G# focus)
+    setTimeout(() => {
+        playSingleChime(1.26);
+    }, 560);
+}
+
 // Global board state tracking array mapping rule configuration rules
 // 0-6 are animal character IDs, 7 is the empty slot.
 // The array index represents the physical spatial position on the board.
@@ -47,7 +169,9 @@ function updateJewelTrack() {
 
         if (isSolved) {
             // CRITICAL: Overrides everything! Always flash victorious green when finished
+
             jewel.classList.add('solved');
+
         } else {
             const layoutClass = targetLayoutClasses[index];
 
@@ -59,6 +183,19 @@ function updateJewelTrack() {
             }
         }
     });
+    // FIRE SOUND: Trigger the sparkling chime cascade!
+    // (We check moveCount > 0 so it doesn't accidentally trigger on initial page load)
+    // FIRE SOUND: Let's remove the moveCount condition entirely for testing.
+    // Instead, we'll use a safer fallback check so it doesn't fire on the very first page load.
+    // 3. FORCE TRIGGER GATE
+    // We remove 'isFirstLaunch' for a brief second just to see if the reset button forces it!
+    // Only play if we haven't already rung the bells for this specific win
+    if (!isVictorySoundPlayed && isSolved) {
+        console.log("🚀 Victory condition met! Triggering playVictoryChime()...");
+        playVictoryChime();
+        isVictorySoundPlayed = true; // Lock it until the next scramble
+    }
+    console.log("--------------------------------");
 }
 /**
  * Grabs a slice from your puzzleLibrary array, parses it, and populates the board.
@@ -245,6 +382,8 @@ function executeTileMove(tileIndex) {
             boardState[idxA] = boardState[idxB];
             boardState[idxB] = tempSwap;
         }
+        // FIRE SOUND: Play the mechanical swipe sound instantly
+        playSwipeSound();
 
         // 3. Re-render UI and query library map for the new layout colors
         renderBoard();
@@ -417,6 +556,58 @@ function triggerDifficultySelection(modeName) {
 // Keep track of whether the player has broken past the first screen launch
 let isFirstLaunch = true;
 window.addEventListener('DOMContentLoaded', () => {
+    // 1. READ PREVIOUS TRACK STATE SPECIFICALLY FOR MUSIC
+    // Defaults to false (unmuted) if they've never interacted with it before
+    let isMusicMuted = localStorage.getItem('musicMuted') === 'false';
+
+    const soundOnSvg = document.getElementById('svg-sound-on');
+    const soundOffSvg = document.getElementById('svg-sound-off');
+    const audioToggleBtn = document.getElementById('btn-audio-toggle');
+
+    // 2. INITIAL COMPLIANCE CHECK ON APP BOOT
+    if (isMusicMuted) {
+        soundOnSvg.style.display = 'none';
+        soundOffSvg.style.display = 'block';
+        if (typeof bgAudio !== 'undefined') {
+            bgAudio.volume = 0; // Completely silence the audio object line
+        }
+    } else {
+        soundOnSvg.style.display = 'block';
+        soundOffSvg.style.display = 'none';
+        if (typeof bgAudio !== 'undefined') {
+            bgAudio.volume = 0.15; // Standard background ambiance floor level
+        }
+    }
+
+    // 3. LISTEN FOR VOLTAGE FLIPS ON THE BUTTON
+    audioToggleBtn.addEventListener('click', (e) => {
+        // Prevents ambient ghost-clicks on underlying puzzle layers
+        e.stopPropagation();
+
+        isMusicMuted = !isMusicMuted;
+        localStorage.setItem('musicMuted', isMusicMuted); // Lock into client storage
+
+        if (isMusicMuted) {
+            soundOnSvg.style.display = 'none';
+            soundOffSvg.style.display = 'block';
+            if (typeof bgAudio !== 'undefined') {
+                bgAudio.volume = 0; // Turn off music instantly
+            }
+            console.log("Background music tracks muted.");
+        } else {
+            soundOnSvg.style.display = 'block';
+            soundOffSvg.style.display = 'none';
+            if (typeof bgAudio !== 'undefined') {
+                bgAudio.volume = 0.15; // Restore music volume
+            }
+
+            // Wake up loop just in case mobile device autoplay blocks had it asleep
+            if (typeof playGameMusic === 'function') {
+                playGameMusic();
+            }
+            console.log("Background music tracks unmuted.");
+        }
+    });
     renderBoard();
     initializeMovementEngine();
 
@@ -469,10 +660,14 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('btn-menu-trigger').addEventListener('click', () => {
+        isVictorySoundPlayed = false;
+        playGameMusic();
         overlay.classList.add('active');
     });
 
     document.getElementById('menu-btn-continue').addEventListener('click', () => {
+        isVictorySoundPlayed = false;
+        playGameMusic();
         overlay.classList.remove('active');
     });
 
@@ -480,6 +675,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('menu-btn-reset').addEventListener('click', () => {
         boardState = [0, 1, 2, 3, 4, 5, 6, 7];
         moveCount = 0; // Clear moves
+        playGameMusic();
         renderBoard();
         updateJewelTrack(); // Clear jewels
         overlay.classList.remove('active');
@@ -489,9 +685,23 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log("Rules modal route opened.");
     });
 
-    document.getElementById('scramble-easy').addEventListener('click', () => triggerDifficultySelection('Easy'));
-    document.getElementById('scramble-medium').addEventListener('click', () => triggerDifficultySelection('Medium'));
-    document.getElementById('scramble-hard').addEventListener('click', () => triggerDifficultySelection('Hard'));
+    document.getElementById('scramble-easy').addEventListener('click', () => {
+        isVictorySoundPlayed = false;
+        playGameMusic();
+        triggerDifficultySelection('Easy');
+    });
+
+    document.getElementById('scramble-medium').addEventListener('click', () => {
+        isVictorySoundPlayed = false;
+        playGameMusic();
+        triggerDifficultySelection('Medium');
+    });
+
+    document.getElementById('scramble-hard').addEventListener('click', () => {
+        isVictorySoundPlayed = false;
+        playGameMusic();
+        triggerDifficultySelection('Hard');
+    });
     // --- SECONDARY COUPLING OVERLAY EVENT LISTENERS ---
     const customRulesOverlay = document.getElementById('custom-rules-overlay');
     const infoButtonTrigger = document.getElementById('menu-btn-info');

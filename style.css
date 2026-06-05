@@ -26,8 +26,8 @@ body {
 }
 
 /* THE VERTICAL MAXIMIZER:
- *  Instead of tracking width, we lock height to 88% of the physical screen height.
- *  Since the board matrix is a 4x2 grid (a 2:1 ratio), the width becomes exactly double that!
+ * Instead of tracking width, we lock height to 88% of the physical screen height.
+ * Since the board matrix is a 4x2 grid (a 2:1 ratio), the width becomes exactly double that!
  */
 .game-container {
     position: relative;
@@ -57,18 +57,20 @@ body {
 /* Skinny Jewel Dashboard Row - Sits right at the base with zero wasted margins */
 .jewel-dashboard-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Spreads flanking zones perfectly edge-to-edge */
     align-items: center;
     width: 100%;
-    height: 32px;         /* Trimmed down slightly to protect puzzle tile territory */
+    height: 36px;          /* Adjusted slightly to scale cleanly with 36px action buttons */
     padding: 0 4px;
 }
+
 /* --- UPGRADED JEWEL CONTAINER & SIZING --- */
-#jewel-track {
-display: flex;
-justify-content: center;
-gap: 10px; /* Generous spacing between indicators */
-margin: 20px 0;
+.jewel-track {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;             /* Generous spacing between indicators */
+    flex-grow: 1;          /* Claims the entire middle row column channel dynamically */
 }
 
 .jewel {
@@ -78,6 +80,52 @@ margin: 20px 0;
     background-color: #222222; /* Sleek, dark default socket */
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(255, 255, 255, 0.05);
     transition: all 0.25s ease-in-out; /* Smooth transition when colors snap change */
+}
+
+/* --- THE SYMMETRICAL CENTERING EQUILIBRIUM --- */
+/* We allocate identical layout footprints (2 buttons + gap = 76px) to both boundaries
+ *  to secure absolute pixel alignment for the center track element. */
+#btn-eye-solution {
+flex-basis: 76px;
+display: flex;
+justify-content: flex-start; /* Aligns eye icon flat against the far-left border */
+}
+
+.track-action-group-right {
+    flex-basis: 76px;
+    display: flex;
+    justify-content: flex-end;   /* Aligns menu icon flat against the far-right border */
+    align-items: center;
+    gap: 4px;                    /* Separation spacing between your mute and menu buttons */
+}
+
+/* Inline Action Icons Left/Right of Jewels */
+.track-action-btn {
+    background: none;
+    border: none;
+    color: #888888;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s ease, filter 0.2s ease, color 0.15s, transform 0.1s;
+}
+
+.track-action-btn:hover { color: #ffffff; }
+.track-action-btn:active { transform: scale(0.9); }
+.track-action-btn svg { width: 24px; height: 24px; }
+
+/* Optional visual feedback for the eye button itself when active vs inactive */
+#btn-eye-solution.inactive {
+opacity: 0.4;
+filter: grayscale(1);
+}
+
+/* When the eye button is active (showing solutions), hide the crossed-out slash line */
+#btn-eye-solution:not(.inactive) .eye-slash-line {
+display: none;
 }
 
 /* --- HIGH-INTENSITY NEON EMBEDDED GLOW STATES --- */
@@ -98,10 +146,7 @@ margin: 20px 0;
     box-shadow: 0 0 14px hsl(205, 100%, 55%), inset 0 2px 2px rgba(255, 255, 255, 0.6);
 }
 .jewel.jewel-green {
-    /* Shifted from lime (115) to deep forest/emerald (142), and dropped lightness to 40% */
     background-color: hsl(142, 100%, 40%);
-
-    /* Boosted the glow spread to 16px using the matching darker hue */
     box-shadow: 0 0 16px hsl(142, 100%, 40%), inset 0 2px 2px rgba(255, 255, 255, 0.5);
 }
 .jewel.jewel-purple {
@@ -118,24 +163,6 @@ margin: 20px 0;
     background-color: #1a1a1a !important;
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.8) !important;
 }
-
-/* Inline Action Icons Left/Right of Jewels */
-.track-action-btn {
-    background: none;
-    border: none;
-    color: #888888;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: color 0.15s, transform 0.1s;
-}
-
-.track-action-btn:hover { color: #ffffff; }
-.track-action-btn:active { transform: scale(0.9); }
-.track-action-btn svg { width: 24px; height: 24px; }
 
 /* Base Tile Styling Elements */
 .tile {
@@ -189,16 +216,9 @@ margin: 20px 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-
-    /* --- THE VISIBILITY ADJUSTMENTS --- */
-    /* Dropped from 0.75 to 0.35 so the background is a gentle shadow rather than a blackout */
     background-color: rgba(0, 0, 0, 0.35);
-
-    /* Removed the blur completely so the character icons stay tack-sharp behind the menu */
     backdrop-filter: none;
-    -webkit-backdrop-filter: none; /* Clear Safari override */
-
-    /* --- KEEPING EVERYTHING ELSE EXACTLY THE SAME --- */
+    -webkit-backdrop-filter: none;
     z-index: 100;
     display: flex;
     justify-content: center;
@@ -308,9 +328,10 @@ margin: 20px 0;
     0%, 100% { box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4); border-radius: 8px; }
     50% { box-shadow: inset 0 0 26px rgba(0, 0, 0, 0.9); border-radius: 8px; }
 }
+
 /* When a jewel is active/lit during gameplay */
 .jewel.lit {
-    background-color: #00f5d4; /* Matching your teal theme color */
+    background-color: #00f5d4;
     box-shadow: 0 0 8px #00f5d4, inset 0 2px 2px rgba(255, 255, 255, 0.5);
 }
 
@@ -325,33 +346,14 @@ margin: 20px 0;
     0% { filter: brightness(1); transform: scale(1); }
     100% { filter: brightness(1.3); transform: scale(1.05); }
 }
+
 /* Mask state when the user is playing blind (solution hidden) */
 .jewel.hidden-mode {
     background-color: #2b2b36 !important;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7), 0 0 4px rgba(157, 78, 221, 0.2) !important;
-    opacity: 1.0 !important; /* Keep full opacity so it looks like a clean hidden node */
+    opacity: 1.0 !important;
 }
 
-/* Optional visual feedback for the eye button itself when active vs inactive */
-#btn-eye-solution.inactive {
-opacity: 0.4;
-filter: grayscale(1);
-}
-/* When the eye button is active (showing solutions), hide the crossed-out slash line */
-#btn-eye-solution:not(.inactive) .eye-slash-line {
-display: none;
-}
-
-/* Optional: Smooth transition for the opacity change you already have */
-#btn-eye-solution {
-transition: opacity 0.2s ease, filter 0.2s ease;
-}
-
-#btn-eye-solution.inactive {
-opacity: 0.4;
-filter: grayscale(1);
-}
-/* Custom Isolated Overlay Container */
 /* Custom Isolated Overlay Container - Now Scrollable */
 #custom-rules-overlay {
 position: fixed;
@@ -361,16 +363,14 @@ width: 100vw;
 height: 100vh;
 background-color: rgba(0, 0, 0, 0.6);
 z-index: 200;
-display: none; /* Controlled by JS */
-
-/* THE FIX: Enable vertical scrolling for the overlay wrapper itself */
+display: none;
 overflow-y: auto;
--webkit-overflow-scrolling: touch; /* Butter-smooth iOS momentum scrolling */
-padding: 20px 0; /* Ensures the card never hugs the absolute top/bottom edge */
+-webkit-overflow-scrolling: touch;
+padding: 20px 0;
 box-sizing: border-box;
 }
 
-/* The Content Card Box - Shifted to flex margins for safe scrolling scrolling */
+/* The Content Card Box - Shifted to flex margins for safe scrolling */
 .custom-rules-card {
     background-color: #242424;
     border: 2px solid #f7b05b;
@@ -380,8 +380,6 @@ box-sizing: border-box;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
     text-align: center;
     font-family: system-ui, -apple-system, sans-serif;
-
-    /* THE FIX: Automatically centers horizontally, and allows vertical expansion */
     margin: auto;
 }
 
