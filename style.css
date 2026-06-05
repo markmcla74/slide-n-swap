@@ -196,14 +196,30 @@ display: none;
     align-items: center;
     cursor: pointer;
 }
-
 /* Pac-Man Portals Structuring */
-.door { position: absolute; width: 16px; height: 22%; background-color: #1a1a1a; z-index: 10; }
-.door-top { top: 11%; }
-.door-bottom { bottom: 19%; }
+.door {
+    position: absolute;
+    width: 16px;
+    height: 22%;
+    background-color: #1a1a1a;
+    z-index: 10;
+
+    /* NEW: Shifts the anchor point of the door from its top edge to its absolute vertical center */
+    transform: translateY(-50%);
+}
+
+/* NEW: Anchored directly to the horizontal center axes of row 1 and row 2 */
+.door-top {
+    top: 25%;
+}
+.door-bottom {
+    top: 75%; /* Instead of bottom: 19% */
+}
+
 .door-left { left: -8px; border-radius: 0 6px 6px 0; }
 .door-right { right: -8px; border-radius: 6px 0 0 6px; }
 
+/* --- Keep all your excellent neon glow states exactly the same --- */
 .door-top.door-left { border-right: 4px solid #ff007f; filter: drop-shadow(2px 0px 6px #ff007f); }
 .door-top.door-right { border-left: 4px solid #ff007f; filter: drop-shadow(-2px 0px 6px #ff007f); }
 .door-bottom.door-left { border-right: 4px solid #00f5d4; filter: drop-shadow(2px 0px 6px #00f5d4); }
