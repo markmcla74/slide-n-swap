@@ -1,4 +1,4 @@
-const CACHE_NAME = 'slideswap-v2'; // Bumped version to force phone cache update
+const CACHE_NAME = 'slideswap-v3'; // Bumped version to force phone cache update
 const ASSETS = [
   './',
 './index.html',
