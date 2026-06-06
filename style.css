@@ -197,23 +197,28 @@ display: none;
     cursor: pointer;
 }
 /* Pac-Man Portals Structuring */
+/* Pac-Man Portals Structuring */
 .door {
     position: absolute;
     width: 16px;
     height: 22%;
     background-color: #1a1a1a;
     z-index: 10;
-
-    /* NEW: Shifts the anchor point of the door from its top edge to its absolute vertical center */
-    transform: translateY(-50%);
 }
 
-/* NEW: Anchored directly to the horizontal center axes of row 1 and row 2 */
+.door-left { left: -8px; border-radius: 0 6px 6px 0; }
+.door-right { right: -8px; border-radius: 6px 0 0 6px; }
+
+/* TOP PORTAL CONFIGURATION */
 .door-top {
     top: 25%;
+    transform: translateY(-50%); /* Keeps default middle anchoring */
 }
+
+/* BOTTOM PORTAL CONFIGURATION */
 .door-bottom {
-    top: 75%; /* Instead of bottom: 19% */
+    top: 75%;
+    transform: translateY(-100%); /* NEW: Pulls the element up by an extra 1/2 door height! */
 }
 
 .door-left { left: -8px; border-radius: 0 6px 6px 0; }
