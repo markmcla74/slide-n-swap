@@ -1,21 +1,96 @@
-// Global Audio Configuration
-const bgAudio = new Audio("background-track.mp3");
-bgAudio.loop = true;
-bgAudio.volume = 0.3; // Kept low so it stays in the background
 
 let isMusicPlaying = false;
 let isVictorySoundPlayed = false; // Prevents the chime from rapid-firing loops
+// --- COGNITIVE PUZZLE SYNTH ENGINE CONFIGURATION ---
+let synthCtx = null;
+let masterOutput = null;
+let rhythmTimer = null;
+let beepTimer = null;
+let isAudioRunning = false;
+let currentBeat = 0;
+
+// Centralized engine execution manager
 function playGameMusic() {
-    if (!isMusicPlaying) {
-        bgAudio.play()
-        .then(() => {
-            isMusicPlaying = true;
-            console.log("Background music started successfully.");
-        })
-        .catch(err => {
-            console.log("Audio failed to play:", err);
-        });
+    let isMusicMuted = localStorage.getItem('musicMuted') === 'true';
+    if (isMusicMuted) {
+        stopPuzzleMusic();
+        return;
     }
+
+    // Initialize hardware audio context if it doesn't exist
+    if (!synthCtx) {
+        synthCtx = new (window.AudioContext || window.webkitAudioContext)();
+        masterOutput = synthCtx.createGain();
+        masterOutput.gain.setValueAtTime(0.4, synthCtx.currentTime); // Safe, soft background mixing floor
+        masterOutput.connect(synthCtx.destination);
+    }
+
+    // Wake context up if mobile browser forced it to sleep
+    if (synthCtx.state === 'suspended') {
+        synthCtx.resume();
+    }
+
+    // Fire up loops if they aren't running yet
+    if (!isAudioRunning) {
+        isAudioRunning = true;
+        // Channel 1: Base puzzle rhythm pacing (600ms per step)
+        rhythmTimer = setInterval(playRhythmStep, 600);
+        // Channel 2: Happy computer accent beeps (triggered every 5 seconds)
+        beepTimer = setInterval(triggerComputerBeep, 5000);
+        console.log("Procedural Audio Engine: Online");
+    }
+}
+function stopPuzzleMusic() {
+    isAudioRunning = false;
+    clearInterval(rhythmTimer);
+    clearInterval(beepTimer);
+    rhythmTimer = null;
+    beepTimer = null;
+    console.log("Procedural Audio Engine: Off");
+}
+// CHANNEL 1 GENERATOR: Upbeat game rhythm
+function playRhythmStep() {
+    if (!synthCtx || synthCtx.state === 'suspended') return;
+    const baseNotes = [130.81, 196.00, 220.00, 174.61]; // Happy, major progression: C3, G3, A3, F3
+    const currentFreq = baseNotes[currentBeat % baseNotes.length];
+
+    const pulseOsc = synthCtx.createOscillator();
+    const pulseGain = synthCtx.createGain();
+
+    pulseOsc.type = 'triangle'; // Mellow, retro game hum
+    pulseOsc.frequency.setValueAtTime(currentFreq, synthCtx.currentTime);
+
+    pulseGain.gain.setValueAtTime(0, synthCtx.currentTime);
+    pulseGain.gain.linearRampToValueAtTime(0.4, synthCtx.currentTime + 0.05);
+    pulseGain.gain.exponentialRampToValueAtTime(0.001, synthCtx.currentTime + 0.4);
+
+    pulseOsc.connect(pulseGain);
+    pulseGain.connect(masterOutput);
+    pulseOsc.start();
+    pulseOsc.stop(synthCtx.currentTime + 0.45);
+    currentBeat++;
+}
+
+// CHANNEL 2 GENERATOR: High-pitch cheer/accentuation computer beeps
+function triggerComputerBeep() {
+    if (!synthCtx || synthCtx.state === 'suspended') return;
+
+    const beepOsc = synthCtx.createOscillator();
+    const beepGain = synthCtx.createGain();
+
+    beepOsc.type = 'sine'; // Pure, crystal-clean tone
+    const frequencies = [523.25, 783.99, 659.25]; // Clear chord accents: C5, G5, E5
+    const randomChime = frequencies[Math.floor(Math.random() * frequencies.length)];
+    beepOsc.frequency.setValueAtTime(randomChime, synthCtx.currentTime);
+
+    beepGain.gain.setValueAtTime(0, synthCtx.currentTime);
+    beepGain.gain.linearRampToValueAtTime(0.3, synthCtx.currentTime + 0.01);
+    beepGain.gain.exponentialRampToValueAtTime(0.001, synthCtx.currentTime + 0.3);
+
+    beepOsc.connect(beepGain);
+    beepGain.connect(masterOutput);
+    beepOsc.start();
+    beepOsc.stop(synthCtx.currentTime + 0.35);
 }
 
 function playSwipeSound() {
@@ -557,8 +632,8 @@ function triggerDifficultySelection(modeName) {
 let isFirstLaunch = true;
 window.addEventListener('DOMContentLoaded', () => {
     // 1. READ PREVIOUS TRACK STATE SPECIFICALLY FOR MUSIC
-    // Defaults to false (unmuted) if they've never interacted with it before
-    let isMusicMuted = localStorage.getItem('musicMuted') === 'false';
+    // Checks explicit true string from storage. Defaults to unmuted if null/unset.
+    let isMusicMuted = localStorage.getItem('musicMuted') === 'true';
 
     const soundOnSvg = document.getElementById('svg-sound-on');
     const soundOffSvg = document.getElementById('svg-sound-off');
@@ -568,46 +643,31 @@ window.addEventListener('DOMContentLoaded', () => {
     if (isMusicMuted) {
         soundOnSvg.style.display = 'none';
         soundOffSvg.style.display = 'block';
-        if (typeof bgAudio !== 'undefined') {
-            bgAudio.volume = 0; // Completely silence the audio object line
-        }
+        stopPuzzleMusic();
     } else {
         soundOnSvg.style.display = 'block';
         soundOffSvg.style.display = 'none';
-        if (typeof bgAudio !== 'undefined') {
-            bgAudio.volume = 0.15; // Standard background ambiance floor level
-        }
+        // Note: Music will initialize on the user's first window touch/click to fulfill browser rules
     }
 
     // 3. LISTEN FOR VOLTAGE FLIPS ON THE BUTTON
     audioToggleBtn.addEventListener('click', (e) => {
-        // Prevents ambient ghost-clicks on underlying puzzle layers
         e.stopPropagation();
 
         isMusicMuted = !isMusicMuted;
-        localStorage.setItem('musicMuted', isMusicMuted); // Lock into client storage
+        localStorage.setItem('musicMuted', isMusicMuted);
 
         if (isMusicMuted) {
             soundOnSvg.style.display = 'none';
             soundOffSvg.style.display = 'block';
-            if (typeof bgAudio !== 'undefined') {
-                bgAudio.volume = 0; // Turn off music instantly
-            }
-            console.log("Background music tracks muted.");
+            stopPuzzleMusic();
         } else {
             soundOnSvg.style.display = 'block';
             soundOffSvg.style.display = 'none';
-            if (typeof bgAudio !== 'undefined') {
-                bgAudio.volume = 0.15; // Restore music volume
-            }
-
-            // Wake up loop just in case mobile device autoplay blocks had it asleep
-            if (typeof playGameMusic === 'function') {
-                playGameMusic();
-            }
-            console.log("Background music tracks unmuted.");
+            playGameMusic();
         }
     });
+
     renderBoard();
     initializeMovementEngine();
 
@@ -617,45 +677,39 @@ window.addEventListener('DOMContentLoaded', () => {
     // --- FORCE MENU OPEN ON LAUNCH FRAME ---
     if (isFirstLaunch) {
         overlay.classList.add('active');
-        continueBtn.innerText = "Explore"; // Swap label for first-time welcome onboarding
+        continueBtn.innerText = "Explore";
     }
 
     // Inside your existing Continue/Explore click handler:
     continueBtn.addEventListener('click', () => {
         overlay.classList.remove('active');
+        playGameMusic(); // Trigger audio setup safely on natural gesture boundary
 
-        // The moment they tap past the first screen, tear down the first-launch flag!
         if (isFirstLaunch) {
             isFirstLaunch = false;
-            continueBtn.innerText = "Continue"; // Revert button back to standard gameplay label
+            continueBtn.innerText = "Continue";
         }
     });
 
     // Inside your existing Menu Trigger click handler:
     document.getElementById('btn-menu-trigger').addEventListener('click', () => {
-        // Double-check to ensure it always says Continue when summoned manually mid-game
         if (!isFirstLaunch) {
             continueBtn.innerText = "Continue";
         }
         overlay.classList.add('active');
     });
-    // Inside DOMContentLoaded:
+
+    // Solution Visual Eye Toggle Handler:
     const eyeButton = document.getElementById('btn-eye-solution');
-
     eyeButton.addEventListener('click', () => {
-        // Toggle the visibility state boolean
         isSolutionVisible = !isSolutionVisible;
-
         console.log(`Solution Visibility Toggled: ${isSolutionVisible}`);
 
-        // Toggle look of the button to show users it's active/inactive
         if (isSolutionVisible) {
             eyeButton.classList.remove('inactive');
         } else {
             eyeButton.classList.add('inactive');
         }
-
-        // Instantly update the jewel track graphics frame
         updateJewelTrack();
     });
 
@@ -671,13 +725,13 @@ window.addEventListener('DOMContentLoaded', () => {
         overlay.classList.remove('active');
     });
 
-    // Inside your reset button listener:
+    // Reset game handler:
     document.getElementById('menu-btn-reset').addEventListener('click', () => {
         boardState = [0, 1, 2, 3, 4, 5, 6, 7];
-        moveCount = 0; // Clear moves
+        moveCount = 0;
         playGameMusic();
         renderBoard();
-        updateJewelTrack(); // Clear jewels
+        updateJewelTrack();
         overlay.classList.remove('active');
     });
 
@@ -702,25 +756,24 @@ window.addEventListener('DOMContentLoaded', () => {
         playGameMusic();
         triggerDifficultySelection('Hard');
     });
+
     // --- SECONDARY COUPLING OVERLAY EVENT LISTENERS ---
     const customRulesOverlay = document.getElementById('custom-rules-overlay');
     const infoButtonTrigger = document.getElementById('menu-btn-info');
     const closeRulesTrigger = document.getElementById('btn-custom-rules-close');
 
-    // Open the new standalone overlay when "Info & Rules" is touched
     if (infoButtonTrigger) {
         infoButtonTrigger.addEventListener('click', () => {
             if (customRulesOverlay) {
-                customRulesOverlay.style.display = 'block'; // Changed from 'flex' to unlock natural container scrolling
+                customRulesOverlay.style.display = 'block';
             }
         });
     }
 
-    // Hide the new standalone overlay when "Back to Menu" is touched
     if (closeRulesTrigger) {
         closeRulesTrigger.addEventListener('click', () => {
             if (customRulesOverlay) {
-                customRulesOverlay.style.display = 'none'; // Turn visibility off instantly
+                customRulesOverlay.style.display = 'none';
             }
         });
     }
