@@ -231,6 +231,12 @@ display: none;
 .door-bottom.door-right { border-left: 4px solid #00f5d4; filter: drop-shadow(-2px 0px 6px #00f5d4); }
 
 /* --- Full Screen Menu Overlay System --- */
+#menu-overlay, #custom-rules-overlay {
+/* ... your existing styling rules ... */
+
+/* Disables pinch-zoom and double-tap zoom, but allows normal vertical scrolling */
+touch-action: pan-y;
+}
 .menu-overlay {
     position: fixed;
     top: 0;

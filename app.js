@@ -724,4 +724,23 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    // --- PINCH-TO-ZOOM LOCKDOWN CONTROLLERS ---
+    // 1. Lock down the Main Options Menu
+    if (overlay) {
+        overlay.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault(); // Kills the two-finger pinch instantly
+            }
+        }, { passive: false });
+    }
+
+    // 2. Lock down the Standalone Rules Overlay
+    if (customRulesOverlay) {
+        customRulesOverlay.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    }
+
 });
