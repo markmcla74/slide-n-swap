@@ -595,26 +595,13 @@ window.addEventListener('DOMContentLoaded', () => {
     if (isFirstLaunch) {
         overlay.classList.add('active');
         continueBtn.innerText = "Explore";
-        // Ensure we start with a clean slate for the menu layout
-        document.body.classList.remove('game-active');
-    }
-
-    // --- HELPER FUNCTIONS FOR ORIENTATION HANDLING ---
-    function enterGameMode() {
-        overlay.classList.remove('active');
-        document.body.classList.add('game-active'); // 📱 Triggers CSS landscape transformation
-    }
-
-    function enterMenuMode() {
-        document.body.classList.remove('game-active'); // 📱 Reverts back to standard centering rules
-        overlay.classList.add('active');
     }
 
     continueBtn.addEventListener('click', () => {
         // ⚡️ CORE UNLOCK STEP: Wakes up the browser line on modal exit
         initGlobalAudioContext();
-        enterGameMode();
 
+        overlay.classList.remove('active');
         if (isFirstLaunch) {
             isFirstLaunch = false;
             continueBtn.innerText = "Continue";
@@ -646,7 +633,14 @@ window.addEventListener('DOMContentLoaded', () => {
         initGlobalAudioContext();
         isVictorySoundPlayed = false;
         playGameMusic();
-        enterMenuMode();
+        overlay.classList.add('active');
+    });
+
+    document.getElementById('menu-btn-continue').addEventListener('click', () => {
+        initGlobalAudioContext();
+        isVictorySoundPlayed = false;
+        playGameMusic();
+        overlay.classList.remove('active');
     });
 
     document.getElementById('menu-btn-reset').addEventListener('click', () => {
@@ -656,7 +650,12 @@ window.addEventListener('DOMContentLoaded', () => {
         playGameMusic();
         renderBoard();
         updateJewelTrack();
-        enterGameMode();
+        overlay.classList.remove('active');
+    });
+
+    document.getElementById('menu-btn-info').addEventListener('click', () => {
+        initGlobalAudioContext();
+        console.log("Rules modal route opened.");
     });
 
     document.getElementById('scramble-easy').addEventListener('click', () => {
@@ -664,7 +663,6 @@ window.addEventListener('DOMContentLoaded', () => {
         isVictorySoundPlayed = false;
         playGameMusic();
         triggerDifficultySelection('Easy');
-        enterGameMode();
     });
 
     document.getElementById('scramble-medium').addEventListener('click', () => {
@@ -672,7 +670,6 @@ window.addEventListener('DOMContentLoaded', () => {
         isVictorySoundPlayed = false;
         playGameMusic();
         triggerDifficultySelection('Medium');
-        enterGameMode();
     });
 
     document.getElementById('scramble-hard').addEventListener('click', () => {
@@ -680,7 +677,6 @@ window.addEventListener('DOMContentLoaded', () => {
         isVictorySoundPlayed = false;
         playGameMusic();
         triggerDifficultySelection('Hard');
-        enterGameMode();
     });
 
     const customRulesOverlay = document.getElementById('custom-rules-overlay');
@@ -720,21 +716,23 @@ window.addEventListener('DOMContentLoaded', () => {
         }, { passive: false });
     }
 });
-
 // 📱 NATIVE WEB VISIBILITY LISTENER
+// Works perfectly in Capacitor without any imports or bundlers
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
+        // App is minimized / user hit back (<) or home button
         bgAudio.pause();
-
+        
         if (globalAudioCtx && globalAudioCtx.state === 'running') {
             globalAudioCtx.suspend();
         }
         console.log("App hidden: Audio paused.");
     } else {
+        // App is brought back to the foreground
         if (isMusicPlaying) {
             bgAudio.play().catch(err => console.log("Audio play prevented:", err));
         }
-
+        
         if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
             globalAudioCtx.resume();
         }
