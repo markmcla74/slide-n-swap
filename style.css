@@ -245,6 +245,13 @@ display: none;
 .door-bottom.door-left { border-right: 4px solid #00f5d4; filter: drop-shadow(2px 0px 6px #00f5d4); }
 .door-bottom.door-right { border-left: 4px solid #00f5d4; filter: drop-shadow(-2px 0px 6px #00f5d4); }
 
+/* Force iOS Safari to respect dynamic vector scaling inside your tiles */
+.animal-svg {
+    width: 100%;
+    height: 100%;
+    display: block; /* Prevents inline alignment clipping */
+}
+
 /* --- Full Screen Menu Overlay System --- */
 #menu-overlay, #custom-rules-overlay {
 /* Disables pinch-zoom and double-tap zoom, but allows normal vertical scrolling */
