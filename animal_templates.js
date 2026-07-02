@@ -50,12 +50,12 @@ const animalTemplates = {
     <path d="M 46,62 Q 50,65 54,62" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
     </svg>`,
 
-    4: `<svg class="animal-svg" viewBox="0 0 100 100">
+   4: `<svg class="animal-svg" viewBox="0 0 100 100">
     <path d="M 38,32 Q 25,18 28,12" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"/>
     <circle cx="28" cy="12" r="4.5" fill="#ff007f" stroke="#000" stroke-width="2"/>
     <path d="M 62,32 Q 75,18 72,12" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"/>
     <circle cx="72" cy="12" r="4.5" fill="#ff007f" stroke="#000" stroke-width="2"/>
-    <path d="M 50,26 C 28,26 26,45 34,58 C 40,68 50,70 50,70 C 50,70 60,68 66,58 C 74,45 72,26 50,26 Z" fill="#3dfc5d" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M 50,26 C 28,26 26,45 34,58 C 40,68 50,70 50,70 C 50,70 60,68 66,58 C 74,45 72,26 50,26 Z" fill="#38b000" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
     <ellipse cx="38" cy="46" rx="7" ry="11" fill="#111" stroke="#000" stroke-width="1.5" transform="rotate(12 38 46)"/>
     <circle cx="36" cy="42" r="2.2" fill="#fff" stroke="none"/>
     <circle cx="39" cy="48" r="0.8" fill="#fff" stroke="none"/>
