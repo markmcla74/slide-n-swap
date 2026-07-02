@@ -1,5 +1,5 @@
 https://markmcla74.github.io/slide-n-swap/
-This web app can feel exactly like a native App Store download using a built-in mobile feature called "Add to Home Screen."
+"Slide 'N Swap" can feel exactly like a native App Store download using a built-in mobile feature called "Add to Home Screen."
 
 On iPhone (Safari): Tap the Share button at the bottom, scroll down, and tap Add to Home Screen.
 
