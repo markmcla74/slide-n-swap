@@ -1,20 +1,34 @@
 * {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
+/* 1. THE EMBEDDED UNDERLAY (Fills the phone's outer notch/bezel edges) */
+html {
+    background-color: #000000 !important; /* Pure black outer frame */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 2. THE PLAYING THEATER CANVAS (Your sleek game screen) */
 body {
-    width: 100vw;
-    height: 100vh;
-    background-color: #1a1a1a;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a; /* Your preferred dark charcoal canvas stays intact! */
+    
+    /* Safely bleed the charcoal background out to the screen edges, 
+       while letting the 'html' rule above keep the status borders masked */
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+
+    /* Keep your perfect centered layout mechanics */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
-
 /* Master alignment container - strips out extra vertical padding completely */
 .game-wrapper {
     display: flex;
@@ -146,8 +160,9 @@ display: none;
     box-shadow: 0 0 14px hsl(205, 100%, 55%), inset 0 2px 2px rgba(255, 255, 255, 0.6);
 }
 .jewel.jewel-green {
-    background-color: hsl(142, 100%, 40%);
-    box-shadow: 0 0 16px hsl(142, 100%, 40%), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+    /* 🎨 MATCHED TO TILE-5 (#38b000) */
+    background-color: hsl(101, 100%, 35%);
+    box-shadow: 0 0 16px hsl(101, 100%, 35%), inset 0 2px 2px rgba(255, 255, 255, 0.5);
 }
 .jewel.jewel-purple {
     background-color: hsl(275, 100%, 60%);
@@ -468,4 +483,27 @@ transition: transform 0.1s;
 
 #btn-custom-rules-close:active {
 transform: scale(0.97);
+}
+/* --- Eye Button State Modifiers --- */
+
+/* State 0: Open Eye -> Hide all slash lines */
+.track-action-btn.state-open .eye-slash-1,
+.track-action-btn.state-open .eye-slash-2 {
+    display: none;
+}
+
+/* State 1: Closed Eye -> Show only the first slash line */
+.track-action-btn.state-closed .eye-slash-1 {
+    display: block;
+    opacity: 0.6;
+}
+.track-action-btn.state-closed .eye-slash-2 {
+    display: none;
+}
+
+/* State 2: Fully Blind Eye -> Show both lines making a distinct X overlay */
+.track-action-btn.state-blind .eye-slash-1,
+.track-action-btn.state-blind .eye-slash-2 {
+    display: block;
+    stroke: #e74c3c; /* Optional: turn lines red for a cool hardcore look */
 }

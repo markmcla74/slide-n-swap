@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -40,13 +41,14 @@
             </div>
 
             <div class="jewel-dashboard-row">
-    <button id="btn-eye-solution" class="track-action-btn inactive" title="Toggle Solution Visibility">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-            <line class="eye-slash-line" x1="3" y1="3" x2="21" y2="21"></line>
-        </svg>
-    </button>
+  <button id="btn-eye-solution" class="track-action-btn state-blind" title="Toggle Solution Visibility">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+        <line class="eye-slash-1" x1="3" y1="3" x2="21" y2="21"></line>
+        <line class="eye-slash-2" x1="21" y1="3" x2="3" y2="21"></line>
+    </svg>
+</button>
 
     <div class="jewel-track" id="jewel-track">
         <div class="jewel"></div>
@@ -62,18 +64,20 @@
     </div>
 
     <div class="track-action-group-right">
-        <button id="btn-audio-toggle" class="track-action-btn" aria-label="Toggle Mute">
-            <svg id="svg-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-            </svg>
-            <svg id="svg-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <line x1="22" y1="9" x2="16" y2="15"></line>
-                <line x1="16" y1="9" x2="22" y2="15"></line>
-            </svg>
-        </button>
+       <button id="btn-audio-toggle" class="track-action-btn" aria-label="Toggle Music Loop">
+    <svg id="svg-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
+    </svg>
+    
+    <svg id="svg-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+    <path d="M9 18V5l12-2v13"></path>
+    <circle cx="6" cy="18" r="3"></circle>
+    <circle cx="18" cy="16" r="3"></circle>
+    <line x1="3" y1="3" x2="21" y2="21"></line>
+</svg>
+</button>
 
         <button id="btn-menu-trigger" class="track-action-btn" title="Game Menu">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -120,20 +124,25 @@
     <div class="custom-rules-card">
         <h2 class="custom-rules-title">How to Play</h2>
 
-        <div class="custom-rules-body">
-            <ul>
-                <li><strong>Slide &amp; Swap:</strong> Slide a character into an open tile. But, whenever you slide a character, its two neighbors swap places too!</li>
-                <li><strong>Pac-Man Doors:</strong> Moving off the right and left edges wraps characters completely around to the opposite edge. </li>
-                <li><strong>The Jewel Track:</strong> The eye icon is normally closed. Tap the Eye icon to view the optimal pathway.</li>
-            </ul>
-
-            <div class="custom-rules-footer">
-                <p>Theoretical Basis:</p>
-                <a href="https://homepages.gac.edu/~jsiehler/games/slideSwap-start.html" target="_blank">
-                    Slide &amp; Swap on Cubic Graphs ↗
-                </a>
-            </div>
-        </div>
+       <div class="custom-rules-body">
+  <ul>
+    <li><strong>Goal:</strong> Scramble the puzzle, then return each colored character to the tile that matches its color.</li>
+    <li><strong>Slide &amp; Swap:</strong> Slide a character into an open tile. Whenever you move a character, its two neighbors swap places too!</li>
+    <li><strong>Pac-Man Doors:</strong> Moving off the left or right edges wraps characters around to the opposite side. (Yes, characters wrapped around opposite edges count as neighbors!)</li>
+    <li><strong>Hints:</strong> Tap the closed Eye icon to view the exact sequence of moves needed to solve the puzzle.</li>
+</ul>
+    <div class="custom-rules-footer">
+        <p>Theoretical Basis:</p>
+        <a href="https://homepages.gac.edu/~jsiehler/games/slideSwap-start.html" target="_blank">
+            Slide &amp; Swap on Cubic Graphs ↗
+        </a>
+        
+        <p style="margin-top: 10px;">Audio Credit:</p>
+        <a href="https://www.youtube.com/@GoldenPalmRecorders/featured" target="_blank">
+            Nebula, Artist: The Grey Room ↗
+        </a>
+    </div>
+</div>
 
         <button id="btn-custom-rules-close">Back to Menu</button>
     </div>

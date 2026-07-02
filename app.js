@@ -1,3 +1,4 @@
+
 // ==========================================
 // 1. GLOBAL AUDIO & LIFECYCLE CONFIGURATION
 // ==========================================
@@ -170,7 +171,8 @@ function playVictoryChime() {
 let boardState = [0, 1, 2, 3, 4, 5, 6, 7];
 let moveCount = 0;
 let activeSolutionSteps = [];
-let isSolutionVisible = false;
+// Eye Mode States: 0 = Open (Full Colors), 1 = Closed (Count Only), 2 = Blind (All Gray)
+let eyeMode = 2;
 
 const JEWEL_COLOR_CLASSES = [
     'jewel-red',    // 0
@@ -205,11 +207,17 @@ function updateJewelTrack() {
         if (isSolved) {
             jewel.classList.add('solved');
         } else {
-            const layoutClass = targetLayoutClasses[index];
-            if (layoutClass !== 'unlit' && !isSolutionVisible) {
-                jewel.classList.add('hidden-mode');
+            // Mode 2: Fully Blind -> force everything to look completely unlit/grayed out
+            if (eyeMode === 2) {
+                jewel.classList.add('unlit');
             } else {
-                jewel.classList.add(layoutClass);
+                const layoutClass = targetLayoutClasses[index];
+                // Mode 1: Closed -> if it's an active step, mask its true color with a generic lit state
+                if (layoutClass !== 'unlit' && eyeMode === 1) {
+                    jewel.classList.add('hidden-mode');
+                } else {
+                    jewel.classList.add(layoutClass);
+                }
             }
         }
     });
@@ -478,11 +486,14 @@ function triggerDifficultySelection(modeName) {
     const finalScrambledState = rawArray.slice(0, 8);
 
     moveCount = 0;
-    isSolutionVisible = false;
+    // Replace: isSolutionVisible = false;
+    eyeMode = 2; // Set default back to Fully Blind (state 2) on new scramble
 
     const eyeButton = document.getElementById('btn-eye-solution');
     if (eyeButton) {
-        eyeButton.classList.add('inactive');
+        // Clear old state tracking classes and apply state-blind
+        eyeButton.classList.remove('state-open', 'state-closed');
+        eyeButton.classList.add('state-blind');
     }
 
     document.getElementById('menu-overlay').classList.remove('active');
@@ -600,13 +611,21 @@ window.addEventListener('DOMContentLoaded', () => {
     const eyeButton = document.getElementById('btn-eye-solution');
     eyeButton.addEventListener('click', () => {
         initGlobalAudioContext();
-        isSolutionVisible = !isSolutionVisible;
 
-        if (isSolutionVisible) {
-            eyeButton.classList.remove('inactive');
-        } else {
-            eyeButton.classList.add('inactive');
+        // Cycles backward: 2 (Blind) -> 1 (Closed) -> 0 (Open) -> 2 (Blind)...
+        eyeMode = (eyeMode - 1 + 3) % 3;
+
+        // Clean up classes and apply the current active layout state class
+        eyeButton.classList.remove('state-open', 'state-closed', 'state-blind');
+
+        if (eyeMode === 2) {
+            eyeButton.classList.add('state-blind');
+        } else if (eyeMode === 1) {
+            eyeButton.classList.add('state-closed');
+        } else if (eyeMode === 0) {
+            eyeButton.classList.add('state-open');
         }
+
         updateJewelTrack();
     });
 
@@ -695,5 +714,28 @@ window.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
             }
         }, { passive: false });
+    }
+});
+// 📱 NATIVE WEB VISIBILITY LISTENER
+// Works perfectly in Capacitor without any imports or bundlers
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        // App is minimized / user hit back (<) or home button
+        bgAudio.pause();
+        
+        if (globalAudioCtx && globalAudioCtx.state === 'running') {
+            globalAudioCtx.suspend();
+        }
+        console.log("App hidden: Audio paused.");
+    } else {
+        // App is brought back to the foreground
+        if (isMusicPlaying) {
+            bgAudio.play().catch(err => console.log("Audio play prevented:", err));
+        }
+        
+        if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+            globalAudioCtx.resume();
+        }
+        console.log("App visible: Audio restored.");
     }
 });
