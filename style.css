@@ -507,3 +507,37 @@ transform: scale(0.97);
     display: block;
     stroke: #e74c3c; /* Optional: turn lines red for a cool hardcore look */
 }
+/* By default, hide the hint completely */
+.rotate-device-hint {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #111111; /* Match your game background */
+    color: #ffffff;
+    z-index: 9999; /* Stay on top of everything */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* 📱 ONLY show the hint if the device is held vertically (Portrait) */
+@media screen and (orientation: portrait) {
+    .rotate-device-hint {
+        display: flex;
+    }
+}
+
+/* Subtle animation to make the icon look like it's tilting */
+.hint-icon {
+    font-size: 3rem;
+    display: inline-block;
+    animation: pulseRotation 2s infinite ease-in-out;
+}
+
+@keyframes pulseRotation {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-90deg); }
+}
