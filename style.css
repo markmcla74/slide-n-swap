@@ -56,18 +56,25 @@ body {
 /* --- SMART AUTOROTATION FALLBACK ---
  *  If the game has started (.game-active) and they are holding it vertically,
  *  we rotate the entire wrapper 90 degrees so the board layouts fit perfectly. */
+/* --- FIXED AUTOROTATION FALLBACK --- */
 @media screen and (orientation: portrait) {
+    /* 1. Spin the outer wrapper, but clamp its bounds to the vertical screen */
     body.game-active .game-wrapper {
         transform: rotate(90deg);
         transform-origin: center center;
-        width: 100vh;  /* Swap viewport dependencies during rotation */
-        height: 100vw;
+        width: 100vh;  /* Its functional width is now the physical screen height */
+        height: 100vw; /* Its functional height is now the physical screen width */
     }
 
+    /* 2. Redefine the board container using inverted viewport units (vw <-> vh) */
     body.game-active .game-container {
-        height: 85vw;  /* Evaluates width as height because of the 90 deg canvas pivot */
+        /* Since we spun 90deg, 'height' controls the horizontal span on screen */
+        height: 85vw;
+        /* 'width' controls the vertical span on screen, maintaining the 2:1 ratio */
         width: 170vw;
+        /* Clamp to the vertical screen's physical width so it can never squish */
         max-width: 94vh;
+        max-height: 100vh;
     }
 }
 
