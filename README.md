@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="slidenswapFeatureImage2p0.png" alt="App Feature Image" width="600">
+</p>
+
 https://markmcla74.github.io/slide-n-swap/
 "Slide 'N Swap" can feel exactly like a native App Store download using a built-in mobile feature called "Add to Home Screen." It places a dedicated game icon right on your phone's home screen for instant access!
 
