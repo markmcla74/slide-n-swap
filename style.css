@@ -1,33 +1,35 @@
 * {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-/* 1. THE EMBEDDED UNDERLAY */
+/* 1. THE EMBEDDED UNDERLAY (Fills the phone's outer notch/bezel edges) */
 html {
-    background-color: #000000 !important;
+    background-color: #000000 !important; /* Pure black outer frame */
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
-/* 2. THE PLAYING THEATER CANVAS */
+/* 2. THE PLAYING THEATER CANVAS (Your sleek game screen) */
 body {
     width: 100%;
     height: 100%;
-    background-color: #1a1a1a;
+    background-color: #1a1a1a; /* Your preferred dark charcoal canvas stays intact! */
+    
+    /* Safely bleed the charcoal background out to the screen edges, 
+       while letting the 'html' rule above keep the status borders masked */
     padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+
+    /* Keep your perfect centered layout mechanics */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
-
-/* --- THE TRANSITION ENGINE (PORTRAIT INTO LANDSCAPE) --- */
-
-/* Master alignment container */
+/* Master alignment container - strips out extra vertical padding completely */
 .game-wrapper {
     display: flex;
     flex-direction: column;
@@ -35,66 +37,44 @@ body {
     justify-content: center;
     width: 100%;
     height: 100%;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* THE SCREEN OPTIMIZER: Default Landscape Rules */
+/* THE VERTICAL MAXIMIZER:
+ * Instead of tracking width, we lock height to 88% of the physical screen height.
+ * Since the board matrix is a 4x2 grid (a 2:1 ratio), the width becomes exactly double that!
+ */
 .game-container {
     position: relative;
-    height: 85vh;          /* Adjusted slightly to guarantee toolbar clearance */
-    width: 170vh;          /* Locked 2:1 aspect ratio matching the grid framework */
-    max-width: 94vw;
+    height: 88vh;          /* Consumes nearly all vertical screen estate safely */
+    width: 176vh;          /* Mathematically locked 2:1 aspect ratio asset box (88 * 2) */
+    max-width: 96vw;       /* Safety guardrail so it doesn't bleed off the sides on ultra-narrow phones */
+
     background: #2a2a2a;
-    padding: 10px;
-    border-radius: 12px;
+    padding: 10px;         /* Leaner internal padding to maximize the scale of the inner grid tiles */
+    border-radius: 12px;   /* Slightly tighter corners to match the dense mobile profile */
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 10px;             /* Snug gap between tiles and the jewel track */
 }
 
-/* --- SMART AUTOROTATION FALLBACK ---
- *  If the game has started (.game-active) and they are holding it vertically,
- *  we rotate the entire wrapper 90 degrees so the board layouts fit perfectly. */
-/* --- FIXED AUTOROTATION FALLBACK --- */
-@media screen and (orientation: portrait) {
-    /* 1. Spin the outer wrapper, but clamp its bounds to the vertical screen */
-    body.game-active .game-wrapper {
-        transform: rotate(90deg);
-        transform-origin: center center;
-        width: 100vh;  /* Its functional width is now the physical screen height */
-        height: 100vw; /* Its functional height is now the physical screen width */
-    }
-
-    /* 2. Redefine the board container using inverted viewport units (vw <-> vh) */
-    body.game-active .game-container {
-        /* Since we spun 90deg, 'height' controls the horizontal span on screen */
-        height: 85vw;
-        /* 'width' controls the vertical span on screen, maintaining the 2:1 ratio */
-        width: 170vw;
-        /* Clamp to the vertical screen's physical width so it can never squish */
-        max-width: 94vh;
-        max-height: 100vh;
-    }
-}
-
-/* 2x4 Grid Core */
+/* 2x4 Grid Core - Automatically expands to perfectly soak up the new tall container canvas */
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 8px;
+    gap: 8px;              /* Tighter tile gutters for a massive, clean arcade tile look */
     flex: 1;
     width: 100%;
 }
 
-/* Skinny Jewel Dashboard Row */
+/* Skinny Jewel Dashboard Row - Sits right at the base with zero wasted margins */
 .jewel-dashboard-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Spreads flanking zones perfectly edge-to-edge */
     align-items: center;
     width: 100%;
-    height: 36px;
+    height: 36px;          /* Adjusted slightly to scale cleanly with 36px action buttons */
     padding: 0 4px;
 }
 
@@ -103,34 +83,37 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    flex-grow: 1;
+    gap: 10px;             /* Generous spacing between indicators */
+    flex-grow: 1;          /* Claims the entire middle row column channel dynamically */
 }
 
 .jewel {
-    width: 22px;
-    height: 22px;
+    width: 22px;        /* Increased size from standard dots */
+    height: 22px;       /* Increased size from standard dots */
     border-radius: 50%;
-    background-color: #222222;
+    background-color: #222222; /* Sleek, dark default socket */
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(255, 255, 255, 0.05);
-    transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out; /* Smooth transition when colors snap change */
 }
 
+/* --- THE SYMMETRICAL CENTERING EQUILIBRIUM --- */
+/* We allocate identical layout footprints (2 buttons + gap = 76px) to both boundaries
+ *  to secure absolute pixel alignment for the center track element. */
 #btn-eye-solution {
 flex-basis: 76px;
 display: flex;
-justify-content: flex-start;
+justify-content: flex-start; /* Aligns eye icon flat against the far-left border */
 }
 
 .track-action-group-right {
     flex-basis: 76px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end;   /* Aligns menu icon flat against the far-right border */
     align-items: center;
-    gap: 4px;
+    gap: 4px;                    /* Separation spacing between your mute and menu buttons */
 }
 
-/* Inline Action Icons */
+/* Inline Action Icons Left/Right of Jewels */
 .track-action-btn {
     background: none;
     border: none;
@@ -148,16 +131,18 @@ justify-content: flex-start;
 .track-action-btn:active { transform: scale(0.9); }
 .track-action-btn svg { width: 24px; height: 24px; }
 
+/* Optional visual feedback for the eye button itself when active vs inactive */
 #btn-eye-solution.inactive {
 opacity: 0.4;
 filter: grayscale(1);
 }
 
+/* When the eye button is active (showing solutions), hide the crossed-out slash line */
 #btn-eye-solution:not(.inactive) .eye-slash-line {
 display: none;
 }
 
-/* --- HIGH-INTENSITY NEON GLOW STATES --- */
+/* --- HIGH-INTENSITY NEON EMBEDDED GLOW STATES --- */
 .jewel.jewel-red {
     background-color: hsl(355, 100%, 60%);
     box-shadow: 0 0 14px hsl(355, 100%, 60%), inset 0 2px 2px rgba(255, 255, 255, 0.6);
@@ -175,6 +160,7 @@ display: none;
     box-shadow: 0 0 14px hsl(205, 100%, 55%), inset 0 2px 2px rgba(255, 255, 255, 0.6);
 }
 .jewel.jewel-green {
+    /* 🎨 MATCHED TO TILE-5 (#38b000) */
     background-color: hsl(101, 100%, 35%);
     box-shadow: 0 0 16px hsl(101, 100%, 35%), inset 0 2px 2px rgba(255, 255, 255, 0.5);
 }
@@ -187,6 +173,7 @@ display: none;
     box-shadow: 0 0 14px hsl(170, 100%, 50%), inset 0 2px 2px rgba(255, 255, 255, 0.6);
 }
 
+/* For complete unlit placeholder slots */
 .jewel.unlit {
     background-color: #1a1a1a !important;
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.8) !important;
@@ -215,7 +202,11 @@ display: none;
     background-color: #ffffff;
     box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.15);
 }
-
+.character-slot svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
 .character-slot {
     width: 80%;
     height: 80%;
@@ -224,7 +215,7 @@ display: none;
     align-items: center;
     cursor: pointer;
 }
-
+/* Pac-Man Portals Structuring */
 /* Pac-Man Portals Structuring */
 .door {
     position: absolute;
@@ -236,9 +227,23 @@ display: none;
 
 .door-left { left: -8px; border-radius: 0 6px 6px 0; }
 .door-right { right: -8px; border-radius: 6px 0 0 6px; }
-.door-top { top: 25%; transform: translateY(-50%); }
-.door-bottom { top: 75%; transform: translateY(-100%); }
 
+/* TOP PORTAL CONFIGURATION */
+.door-top {
+    top: 25%;
+    transform: translateY(-50%); /* Keeps default middle anchoring */
+}
+
+/* BOTTOM PORTAL CONFIGURATION */
+.door-bottom {
+    top: 75%;
+    transform: translateY(-100%); /* NEW: Pulls the element up by an extra 1/2 door height! */
+}
+
+.door-left { left: -8px; border-radius: 0 6px 6px 0; }
+.door-right { right: -8px; border-radius: 6px 0 0 6px; }
+
+/* --- Keep all your excellent neon glow states exactly the same --- */
 .door-top.door-left { border-right: 4px solid #ff007f; filter: drop-shadow(2px 0px 6px #ff007f); }
 .door-top.door-right { border-left: 4px solid #ff007f; filter: drop-shadow(-2px 0px 6px #ff007f); }
 .door-bottom.door-left { border-right: 4px solid #00f5d4; filter: drop-shadow(2px 0px 6px #00f5d4); }
@@ -246,6 +251,7 @@ display: none;
 
 /* --- Full Screen Menu Overlay System --- */
 #menu-overlay, #custom-rules-overlay {
+/* Disables pinch-zoom and double-tap zoom, but allows normal vertical scrolling */
 touch-action: pan-y;
 }
 
@@ -255,16 +261,35 @@ touch-action: pan-y;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker context clarity */
-    z-index: 500; /* Pulled forward over rotated environments */
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    z-index: 100;
+
+    /* 1. ENABLE VERTICAL SCROLLING FOR OVERLAY */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Buttery smooth inertial scrolling for iOS */
+
     display: flex;
     justify-content: center;
-    align-items: center;
+
+    /*
+     2 . RECONCILE LAYOUT CRUSHING:    *
+     Using flex-start means items anchor neatly to the top when scrolling down.
+     Combining it with margins on the card keeps it centered on larger screens.
+     */
+    align-items: flex-start;
+
+    /* Give space at the bottom so the card never clips into screen margins */
+    padding: 24px 0;
+    box-sizing: border-box;
+
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
 }
 
+/* Active overlay state toggle */
 .menu-overlay.active {
     opacity: 1;
     pointer-events: auto;
@@ -274,10 +299,18 @@ touch-action: pan-y;
     background-color: #242424;
     border: 2px solid #444444;
     border-radius: 16px;
-    width: 290px;
+    width: 280px;
     padding: 20px;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
     text-align: center;
+
+    /*
+     3 . RESPONSIVE HOVER-CENTERING:   *
+     Setting auto margins keeps the card perfectly centered vertically on large screens,
+     but seamlessly converts to normal top-down spacing when the screen runs out of space.
+     */
+    margin: auto 0;
+
     transform: translateY(20px);
     transition: transform 0.2s ease;
 }
@@ -301,6 +334,7 @@ touch-action: pan-y;
     gap: 12px;
 }
 
+/* Action button configurations inside overlay stack */
 .menu-btn {
     width: 100%;
     height: 44px;
@@ -319,7 +353,7 @@ touch-action: pan-y;
 .btn-prime { background-color: #35a7ff; }
 .btn-danger { background-color: #ff5964; }
 .btn-info { background-color: #4a6fa5; }
-
+/* Custom Embedded Scramble block in the card framework */
 .menu-scramble-wrapper {
     background-color: #1a1a1a;
     border: 2px solid #f7b05b;
@@ -356,17 +390,20 @@ touch-action: pan-y;
 .scramble-target-btn:active { transform: scale(0.85); }
 .scramble-target-btn svg { width: 100%; height: 100%; }
 
+/* Home Glow Pulsing System Rules */
 .character-slot.at-home { animation: homeGlowPulse 1.6s infinite ease-in-out; }
 @keyframes homeGlowPulse {
     0%, 100% { box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4); border-radius: 8px; }
     50% { box-shadow: inset 0 0 26px rgba(0, 0, 0, 0.9); border-radius: 8px; }
 }
 
+/* When a jewel is active/lit during gameplay */
 .jewel.lit {
     background-color: #00f5d4;
     box-shadow: 0 0 8px #00f5d4, inset 0 2px 2px rgba(255, 255, 255, 0.5);
 }
 
+/* When the game is won, flash all jewels neon green! */
 .jewel.solved {
     background-color: #2ecc71;
     box-shadow: 0 0 12px #2ecc71, inset 0 2px 2px rgba(255, 255, 255, 0.5);
@@ -378,12 +415,14 @@ touch-action: pan-y;
     100% { filter: brightness(1.3); transform: scale(1.05); }
 }
 
+/* Mask state when the user is playing blind (solution hidden) */
 .jewel.hidden-mode {
     background-color: #2b2b36 !important;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7), 0 0 4px rgba(157, 78, 221, 0.2) !important;
     opacity: 1.0 !important;
 }
 
+/* Custom Isolated Overlay Container - Now Scrollable */
 #custom-rules-overlay {
 position: fixed;
 top: 0;
@@ -391,7 +430,7 @@ left: 0;
 width: 100vw;
 height: 100vh;
 background-color: rgba(0, 0, 0, 0.6);
-z-index: 600;
+z-index: 200;
 display: none;
 overflow-y: auto;
 -webkit-overflow-scrolling: touch;
@@ -399,6 +438,7 @@ padding: 20px 0;
 box-sizing: border-box;
 }
 
+/* The Content Card Box - Shifted to flex margins for safe scrolling */
 .custom-rules-card {
     background-color: #242424;
     border: 2px solid #f7b05b;
@@ -453,6 +493,7 @@ box-sizing: border-box;
     font-weight: bold;
 }
 
+/* Dedicated Dismiss Button styling */
 #btn-custom-rules-close {
 width: 100%;
 height: 44px;
@@ -469,12 +510,15 @@ transition: transform 0.1s;
 #btn-custom-rules-close:active {
 transform: scale(0.97);
 }
+/* --- Eye Button State Modifiers --- */
 
+/* State 0: Open Eye -> Hide all slash lines */
 .track-action-btn.state-open .eye-slash-1,
 .track-action-btn.state-open .eye-slash-2 {
     display: none;
 }
 
+/* State 1: Closed Eye -> Show only the first slash line */
 .track-action-btn.state-closed .eye-slash-1 {
     display: block;
     opacity: 0.6;
@@ -483,8 +527,43 @@ transform: scale(0.97);
     display: none;
 }
 
+/* State 2: Fully Blind Eye -> Show both lines making a distinct X overlay */
 .track-action-btn.state-blind .eye-slash-1,
 .track-action-btn.state-blind .eye-slash-2 {
     display: block;
-    stroke: #e74c3c;
+    stroke: #e74c3c; /* Optional: turn lines red for a cool hardcore look */
+}
+/* By default, hide the hint completely */
+.rotate-device-hint {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #111111; /* Match your game background */
+    color: #ffffff;
+    z-index: 9999; /* Stay on top of everything */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* 📱 ONLY show the hint if the device is held vertically (Portrait) */
+@media screen and (orientation: portrait) {
+    .rotate-device-hint {
+        display: flex;
+    }
+}
+
+/* Subtle animation to make the icon look like it's tilting */
+.hint-icon {
+    font-size: 3rem;
+    display: inline-block;
+    animation: pulseRotation 2s infinite ease-in-out;
+}
+
+@keyframes pulseRotation {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-90deg); }
 }
