@@ -1,7 +1,7 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+box-sizing: border-box;
+margin: 0;
+padding: 0;
 }
 
 /* 1. THE EMBEDDED UNDERLAY (Fills the phone's outer notch/bezel edges) */
@@ -16,13 +16,11 @@ html {
 body {
     width: 100%;
     height: 100%;
-    min-height: 100vh;
-    min-height: -webkit-fill-available; /* Forces iOS WebKit to calculate real estate perfectly */
     background-color: #1a1a1a; /* Your preferred dark charcoal canvas stays intact! */
 
-    /* Dynamically shields content from crashing into the top notch or bottom system bars */
-    padding: env(safe-area-inset-top, 16px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 16px) env(safe-area-inset-left, 16px);
-    box-sizing: border-box;
+    /* Safely bleed the charcoal background out to the screen edges,
+     *       while letting the 'html' rule above keep the status borders masked */
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 
     /* Keep your perfect centered layout mechanics */
     display: flex;
@@ -39,27 +37,25 @@ body {
     justify-content: center;
     width: 100%;
     height: 100%;
-    max-height: -webkit-fill-available;
 }
 
 /* THE VERTICAL MAXIMIZER:
- * Instead of tracking width, we lock height to 84% of the physical screen height.
- * We lower it slightly from 88% to 84% to make clean room for the new top notch safe-areas!
+ * Instead of tracking width, we lock height to 88% of the physical screen height.
+ * Since the board matrix is a 4x2 grid (a 2:1 ratio), the width becomes exactly double that!
  */
 .game-container {
     position: relative;
-    height: 84dvh;          /* Uses dynamic viewport height to prevent standalone PWA clipping */
-    width: 168dvh;          /* Mathematically locked 2:1 aspect ratio asset box (84 * 2) */
-    max-width: 94vw;        /* Safety guardrail so it doesn't bleed off the sides on ultra-narrow phones */
-    max-height: 90%;        /* Hard layout ceiling stops vertical drift entirely */
+    height: 88vh;          /* Consumes nearly all vertical screen estate safely */
+    width: 176vh;          /* Mathematically locked 2:1 aspect ratio asset box (88 * 2) */
+    max-width: 96vw;       /* Safety guardrail so it doesn't bleed off the sides on ultra-narrow phones */
 
     background: #2a2a2a;
-    padding: 10px;          /* Leaner internal padding to maximize the scale of the inner grid tiles */
-    border-radius: 12px;    /* Slightly tighter corners to match the dense mobile profile */
+    padding: 10px;         /* Leaner internal padding to maximize the scale of the inner grid tiles */
+    border-radius: 12px;   /* Slightly tighter corners to match the dense mobile profile */
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    gap: 10px;              /* Snug gap between tiles and the jewel track */
+    gap: 10px;             /* Snug gap between tiles and the jewel track */
 }
 
 /* 2x4 Grid Core - Automatically expands to perfectly soak up the new tall container canvas */
@@ -249,13 +245,19 @@ display: none;
 .door-bottom.door-left { border-right: 4px solid #00f5d4; filter: drop-shadow(2px 0px 6px #00f5d4); }
 .door-bottom.door-right { border-left: 4px solid #00f5d4; filter: drop-shadow(-2px 0px 6px #00f5d4); }
 
+/* Force iOS Safari to respect dynamic vector scaling inside your tiles */
+.animal-svg {
+    width: 100%;
+    height: 100%;
+    display: block; /* Prevents inline alignment clipping */
+}
+
 /* --- Full Screen Menu Overlay System --- */
 #menu-overlay, #custom-rules-overlay {
-/* ... your existing styling rules ... */
-
 /* Disables pinch-zoom and double-tap zoom, but allows normal vertical scrolling */
 touch-action: pan-y;
 }
+
 .menu-overlay {
     position: fixed;
     top: 0;
@@ -266,9 +268,25 @@ touch-action: pan-y;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     z-index: 100;
+
+    /* 1. ENABLE VERTICAL SCROLLING FOR OVERLAY */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Buttery smooth inertial scrolling for iOS */
+
     display: flex;
     justify-content: center;
-    align-items: center;
+
+    /*
+     *     2 . RECONCILE LAYOUT CRUSHING:    *
+     *     Using flex-start means items anchor neatly to the top when scrolling down.
+     *     Combining it with margins on the card keeps it centered on larger screens.
+     */
+    align-items: flex-start;
+
+    /* Give space at the bottom so the card never clips into screen margins */
+    padding: 24px 0;
+    box-sizing: border-box;
+
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -288,6 +306,14 @@ touch-action: pan-y;
     padding: 20px;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
     text-align: center;
+
+    /*
+     *     3 . RESPONSIVE HOVER-CENTERING:   *
+     *     Setting auto margins keeps the card perfectly centered vertically on large screens,
+     *     but seamlessly converts to normal top-down spacing when the screen runs out of space.
+     */
+    margin: auto 0;
+
     transform: translateY(20px);
     transition: transform 0.2s ease;
 }
@@ -330,7 +356,6 @@ touch-action: pan-y;
 .btn-prime { background-color: #35a7ff; }
 .btn-danger { background-color: #ff5964; }
 .btn-info { background-color: #4a6fa5; }
-
 /* Custom Embedded Scramble block in the card framework */
 .menu-scramble-wrapper {
     background-color: #1a1a1a;
@@ -510,4 +535,38 @@ transform: scale(0.97);
 .track-action-btn.state-blind .eye-slash-2 {
     display: block;
     stroke: #e74c3c; /* Optional: turn lines red for a cool hardcore look */
+}
+/* By default, hide the hint completely */
+.rotate-device-hint {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #111111; /* Match your game background */
+    color: #ffffff;
+    z-index: 9999; /* Stay on top of everything */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* 📱 ONLY show the hint if the device is held vertically (Portrait) */
+@media screen and (orientation: portrait) {
+    .rotate-device-hint {
+        display: flex;
+    }
+}
+
+/* Subtle animation to make the icon look like it's tilting */
+.hint-icon {
+    font-size: 3rem;
+    display: inline-block;
+    animation: pulseRotation 2s infinite ease-in-out;
+}
+
+@keyframes pulseRotation {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-90deg); }
 }
