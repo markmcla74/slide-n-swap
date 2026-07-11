@@ -12,6 +12,7 @@ let isVictorySoundPlayed = false; // Prevents the chime from rapid-firing loops
 // ⚡️ THE MASTER FIX: One single shared Web Audio context for all sound effects
 let globalAudioCtx = null;
 
+
 /**
  * Initializes and unlocks the global audio context on the very first user tap
  */
@@ -183,7 +184,14 @@ const JEWEL_COLOR_CLASSES = [
 'jewel-purple', // 5
 'jewel-teal'    // 6
 ];
-
+// ==========================================
+// 2.5 PUZZLE LIBRARY CONFIGURATION PRESETS
+// ==========================================
+const SCHRAMBLE_PRESETS = {
+    'Easy': { minIndex: 13, maxIndex: 107 },
+    'Medium': { minIndex: 108, maxIndex: 888 },
+    'Hard': { minIndex: 889, maxIndex: 1000 } // Adjust 1000 if your library length varies
+};
 function updateJewelTrack() {
     const jewels = document.querySelectorAll('#jewel-track .jewel');
     const isSolved = boardState.every((val, index) => val === index);
