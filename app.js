@@ -269,6 +269,7 @@ function renderBoard() {
         slot.innerHTML = "";
         slot.classList.remove('at-home');
 
+        // Keeping your original layout string engine exactly as it was since it worked!
         if (currentTileIndex === 7) {
             targetTile.className = "tile tile-empty";
         } else {
@@ -277,7 +278,12 @@ function renderBoard() {
 
         if (characterId !== 7) {
             if (typeof animalTemplates !== 'undefined' && animalTemplates[characterId]) {
-                slot.innerHTML = animalTemplates[characterId];
+
+                // 🛠️ THE SAFEST CONVERSION:
+                // We use standard innerHTML, but wrap the asset inside a wrapper block
+                // that forces WebKit to cleanly calculate the inline SVG bounding box.
+                slot.innerHTML = `<div class="svg-wrapper" style="width:100%; height:100%; display:flex; justify-content:center; align-items:center;">${animalTemplates[characterId]}</div>`;
+
             } else {
                 slot.innerText = characterId;
             }
