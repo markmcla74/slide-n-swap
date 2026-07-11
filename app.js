@@ -12,7 +12,6 @@ let isVictorySoundPlayed = false; // Prevents the chime from rapid-firing loops
 // ⚡️ THE MASTER FIX: One single shared Web Audio context for all sound effects
 let globalAudioCtx = null;
 
-
 /**
  * Initializes and unlocks the global audio context on the very first user tap
  */
@@ -184,14 +183,7 @@ const JEWEL_COLOR_CLASSES = [
 'jewel-purple', // 5
 'jewel-teal'    // 6
 ];
-// ==========================================
-// 2.5 PUZZLE LIBRARY CONFIGURATION PRESETS
-// ==========================================
-const SCHRAMBLE_PRESETS = {
-    'Easy': { minIndex: 13, maxIndex: 107 },
-    'Medium': { minIndex: 108, maxIndex: 888 },
-    'Hard': { minIndex: 889, maxIndex: 1000 } // Adjust 1000 if your library length varies
-};
+
 function updateJewelTrack() {
     const jewels = document.querySelectorAll('#jewel-track .jewel');
     const isSolved = boardState.every((val, index) => val === index);
@@ -723,35 +715,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         }, { passive: false });
     }
-    // ==========================================
-    // 📱 UNIVERSAL MOBILE ORIENTATION CONTROLLER
-    // ==========================================
-    const hintOverlay = document.querySelector('.rotate-device-hint');
-
-    function checkDeviceOrientation() {
-        if (!hintOverlay) return;
-
-        // Check if the user is on a mobile/tablet profile
-        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-        // Calculate live screen proportions
-        const isPortraitMode = window.innerHeight > window.innerWidth;
-
-        // Rule: If they are on a mobile device AND holding it vertically in portrait mode
-        if (isMobileDevice && isPortraitMode) {
-            hintOverlay.classList.add('show-warning');
-        } else {
-            // Safe Mode: Hide the screen overlay completely on all desktops or correct landscape views!
-            hintOverlay.classList.remove('show-warning');
-        }
-    }
-
-    // Run the dimension check immediately upon page initialization
-    checkDeviceOrientation();
-
-    // Fire the calculation step whenever the window size shifts or flips angles
-    window.addEventListener('resize', checkDeviceOrientation);
-    window.addEventListener('orientationchange', checkDeviceOrientation);
 });
 // 📱 NATIVE WEB VISIBILITY LISTENER
 // Works perfectly in Capacitor without any imports or bundlers
