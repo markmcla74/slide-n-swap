@@ -247,10 +247,11 @@ display: none;
 
 /* --- Full Screen Menu Overlay System --- */
 #menu-overlay, #custom-rules-overlay {
+/* ... your existing styling rules ... */
+
 /* Disables pinch-zoom and double-tap zoom, but allows normal vertical scrolling */
 touch-action: pan-y;
 }
-
 .menu-overlay {
     position: fixed;
     top: 0;
@@ -261,25 +262,9 @@ touch-action: pan-y;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     z-index: 100;
-
-    /* 1. ENABLE VERTICAL SCROLLING FOR OVERLAY */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* Buttery smooth inertial scrolling for iOS */
-
     display: flex;
     justify-content: center;
-
-    /*
-     2 . RECONCILE LAYOUT CRUSHING:    *
-     Using flex-start means items anchor neatly to the top when scrolling down.
-     Combining it with margins on the card keeps it centered on larger screens.
-     */
-    align-items: flex-start;
-
-    /* Give space at the bottom so the card never clips into screen margins */
-    padding: 24px 0;
-    box-sizing: border-box;
-
+    align-items: center;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -299,14 +284,6 @@ touch-action: pan-y;
     padding: 20px;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
     text-align: center;
-
-    /*
-     3 . RESPONSIVE HOVER-CENTERING:   *
-     Setting auto margins keeps the card perfectly centered vertically on large screens,
-     but seamlessly converts to normal top-down spacing when the screen runs out of space.
-     */
-    margin: auto 0;
-
     transform: translateY(20px);
     transition: transform 0.2s ease;
 }
@@ -349,6 +326,7 @@ touch-action: pan-y;
 .btn-prime { background-color: #35a7ff; }
 .btn-danger { background-color: #ff5964; }
 .btn-info { background-color: #4a6fa5; }
+
 /* Custom Embedded Scramble block in the card framework */
 .menu-scramble-wrapper {
     background-color: #1a1a1a;
