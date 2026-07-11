@@ -1,7 +1,7 @@
 * {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 /* 1. THE EMBEDDED UNDERLAY (Fills the phone's outer notch/bezel edges) */
@@ -10,19 +10,17 @@ html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    position: fixed; /* 👈 Hard-locks WebKit from scrolling past boundaries */
-    top: 0;
-    left: 0;
 }
+
 /* 2. THE PLAYING THEATER CANVAS (Your sleek game screen) */
 body {
     width: 100%;
     height: 100%;
     background-color: #1a1a1a; /* Your preferred dark charcoal canvas stays intact! */
-
-    /* 📱 SAFARI DEFENSIVE POSITIONING FIX: Ensure padding calculation preserves grid structure */
-    padding: env(safe-area-inset-top, 8px) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 8px) env(safe-area-inset-left, 0);
-    box-sizing: border-box;
+    
+    /* Safely bleed the charcoal background out to the screen edges, 
+       while letting the 'html' rule above keep the status borders masked */
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 
     /* Keep your perfect centered layout mechanics */
     display: flex;
@@ -279,9 +277,9 @@ touch-action: pan-y;
     justify-content: center;
 
     /*
-     *     2 . RECONCILE LAYOUT CRUSHING:    *
-     *     Using flex-start means items anchor neatly to the top when scrolling down.
-     *     Combining it with margins on the card keeps it centered on larger screens.
+     2 . RECONCILE LAYOUT CRUSHING:    *
+     Using flex-start means items anchor neatly to the top when scrolling down.
+     Combining it with margins on the card keeps it centered on larger screens.
      */
     align-items: flex-start;
 
@@ -310,9 +308,9 @@ touch-action: pan-y;
     text-align: center;
 
     /*
-     *     3 . RESPONSIVE HOVER-CENTERING:   *
-     *     Setting auto margins keeps the card perfectly centered vertically on large screens,
-     *     but seamlessly converts to normal top-down spacing when the screen runs out of space.
+     3 . RESPONSIVE HOVER-CENTERING:   *
+     Setting auto margins keeps the card perfectly centered vertically on large screens,
+     but seamlessly converts to normal top-down spacing when the screen runs out of space.
      */
     margin: auto 0;
 
@@ -571,11 +569,4 @@ transform: scale(0.97);
 @keyframes pulseRotation {
     0%, 100% { transform: rotate(0deg); }
     50% { transform: rotate(-90deg); }
-}
-/* 🎯 SAFARI OVERRIDE TUNER: Prevents standalone PWA content from drifting underneath the notch */
-@supports (-webkit-touch-callout: none) {
-    .game-wrapper {
-        padding-top: max(10px, env(safe-area-inset-top)); /* Creates a structural cushion */
-        box-sizing: border-box;
-    }
 }
