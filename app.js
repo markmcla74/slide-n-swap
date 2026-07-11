@@ -723,6 +723,35 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         }, { passive: false });
     }
+    // ==========================================
+    // 📱 UNIVERSAL MOBILE ORIENTATION CONTROLLER
+    // ==========================================
+    const hintOverlay = document.querySelector('.rotate-device-hint');
+
+    function checkDeviceOrientation() {
+        if (!hintOverlay) return;
+
+        // Check if the user is on a mobile/tablet profile
+        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Calculate live screen proportions
+        const isPortraitMode = window.innerHeight > window.innerWidth;
+
+        // Rule: If they are on a mobile device AND holding it vertically in portrait mode
+        if (isMobileDevice && isPortraitMode) {
+            hintOverlay.classList.add('show-warning');
+        } else {
+            // Safe Mode: Hide the screen overlay completely on all desktops or correct landscape views!
+            hintOverlay.classList.remove('show-warning');
+        }
+    }
+
+    // Run the dimension check immediately upon page initialization
+    checkDeviceOrientation();
+
+    // Fire the calculation step whenever the window size shifts or flips angles
+    window.addEventListener('resize', checkDeviceOrientation);
+    window.addEventListener('orientationchange', checkDeviceOrientation);
 });
 // 📱 NATIVE WEB VISIBILITY LISTENER
 // Works perfectly in Capacitor without any imports or bundlers

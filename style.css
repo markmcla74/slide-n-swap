@@ -536,20 +536,23 @@ transform: scale(0.97);
     display: block;
     stroke: #e74c3c; /* Optional: turn lines red for a cool hardcore look */
 }
-/* By default, hide the hint completely */
 .rotate-device-hint {
-    display: none;
-    position: fixed;
+    position: fixed; /* 👈 Detaches the element so it hovers above the page like a ghost */
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #111111; /* Match your game background */
-    color: #ffffff;
-    z-index: 9999; /* Stay on top of everything */
+    width: 100%;
+    height: 100%;
+    z-index: 9999;   /* Guarantees it stays layered over the game board */
+
+    /* 📱 Force it hidden by default, we will let the script turn it on only when needed */
+    display: none;
     justify-content: center;
     align-items: center;
-    text-align: center;
+}
+
+/* Add this clean helper class right beneath it */
+.rotate-device-hint.show-warning {
+    display: flex !important;
 }
 
 /* 📱 ONLY show the hint if the device is held vertically (Portrait) */
