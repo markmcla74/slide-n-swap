@@ -10,17 +10,19 @@ html {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    position: fixed; /* 👈 Hard-locks WebKit from scrolling past boundaries */
+    top: 0;
+    left: 0;
 }
-
 /* 2. THE PLAYING THEATER CANVAS (Your sleek game screen) */
 body {
     width: 100%;
     height: 100%;
     background-color: #1a1a1a; /* Your preferred dark charcoal canvas stays intact! */
 
-    /* Safely bleed the charcoal background out to the screen edges,
-     *       while letting the 'html' rule above keep the status borders masked */
-    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+    /* 📱 SAFARI DEFENSIVE POSITIONING FIX: Ensure padding calculation preserves grid structure */
+    padding: env(safe-area-inset-top, 8px) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 8px) env(safe-area-inset-left, 0);
+    box-sizing: border-box;
 
     /* Keep your perfect centered layout mechanics */
     display: flex;
@@ -569,4 +571,11 @@ transform: scale(0.97);
 @keyframes pulseRotation {
     0%, 100% { transform: rotate(0deg); }
     50% { transform: rotate(-90deg); }
+}
+/* 🎯 SAFARI OVERRIDE TUNER: Prevents standalone PWA content from drifting underneath the notch */
+@supports (-webkit-touch-callout: none) {
+    .game-wrapper {
+        padding-top: max(10px, env(safe-area-inset-top)); /* Creates a structural cushion */
+        box-sizing: border-box;
+    }
 }
