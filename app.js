@@ -253,7 +253,7 @@ const animalEmojis = {
     3: "🥶", // BLUE: Cold Face
     4: "🐢", // GREEN: Turtle
     5: "😈", // PURPLE: Smiling Face with Horns
-    6: "🐻"  // BROWN: Bear Face
+    6: "🐺"  // GRAY: Wolf Face
     // 7 is skipped because it represents the empty/blank tile slot
 };
 
