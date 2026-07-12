@@ -291,7 +291,7 @@ function renderBoard() {
             // Check if we have an emoji mapped to this character ID
             if (animalEmojis[characterId] !== undefined) {
                 // Render the emoji inside a clean, centered container layout box
-                slot.innerHTML = `<span style="font-size: 7.5rem; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; user-select: none;">${animalEmojis[characterId]}</span>`;
+                slot.innerHTML = `<span style="font-size: 4.5rem; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; user-select: none;">${animalEmojis[characterId]}</span>`;
             } else {
                 // Fallback to the raw ID number if an emoji isn't found
                 slot.innerText = characterId;
