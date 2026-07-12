@@ -251,9 +251,9 @@ const animalEmojis = {
     1: "🐯", // Tiger
     2: "🐥", // YELLOW: Front-Facing Baby Chick
     3: "🥶", // BLUE: Cold Face
-    4: "🐢", // LIME GREEN: Turtle
+    4: "👽", // GREEN: Alien (Classic alien green)
     5: "😈", // PURPLE: Smiling Face with Horns
-    6: "👽", // GREEN: Alien (Classic alien green)
+    6: "🐻"  // BROWN: Bear Face
     // 7 is skipped because it represents the empty/blank tile slot
 };
 
@@ -291,7 +291,7 @@ function renderBoard() {
             // Check if we have an emoji mapped to this character ID
             if (animalEmojis[characterId] !== undefined) {
                 // Render the emoji inside a clean, centered container layout box
-                slot.innerHTML = `<span style="font-size: 4.5rem; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; user-select: none;">${animalEmojis[characterId]}</span>`;
+                slot.innerHTML = `<span style="font-size: 4.0rem; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; user-select: none;">${animalEmojis[characterId]}</span>`;
             } else {
                 // Fallback to the raw ID number if an emoji isn't found
                 slot.innerText = characterId;
