@@ -181,7 +181,7 @@ const JEWEL_COLOR_CLASSES = [
 'jewel-blue',   // 3
 'jewel-green',  // 4
 'jewel-purple', // 5
-'jewel-brown'    // 6
+'jewel-gray'    // 6
 ];
 
 function updateJewelTrack() {
