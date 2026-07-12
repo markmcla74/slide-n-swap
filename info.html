@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 'N Swap - Info & Rules</title>
+    <style>
+        /* Modern reset matching game aesthetics */
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Card layout that scales beautifully on mobile and desktop */
+        .info-container {
+            background-color: #242424;
+            border: 2px solid #444444;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 450px;
+            padding: 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+            box-sizing: border-box;
+        }
+
+        /* Header UI */
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #444444;
+            padding-bottom: 14px;
+        }
+
+        .info-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        /* Clean back button */
+        .back-btn {
+            background-color: #4a6fa5;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: filter 0.1s, transform 0.1s;
+        }
+        .back-btn:active { transform: scale(0.97); }
+        .back-btn:hover { filter: brightness(1.1); }
+
+        /* Rules content block */
+        .custom-rules-body ul {
+            padding-left: 20px;
+            margin: 0 0 24px 0;
+        }
+
+        .custom-rules-body li {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            color: #d1d1d1;
+        }
+
+        .custom-rules-body strong {
+            color: #f7b05b; /* High contrast amber highlight for core concepts */
+        }
+
+        /* Footer links styling */
+        .custom-rules-footer {
+            border-top: 1px solid #444444;
+            padding-top: 16px;
+            margin-top: 20px;
+        }
+
+        .custom-rules-footer p {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #888888;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .custom-rules-footer a {
+            display: inline-block;
+            color: #35a7ff;
+            font-size: 0.95rem;
+            text-decoration: none;
+            margin-bottom: 14px;
+            transition: color 0.1s;
+        }
+
+        .custom-rules-footer a:hover {
+            color: #82caff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="info-container">
+        <div class="info-header">
+            <h1 class="info-title">Rules & Info</h1>
+            <!-- Dynamically references the root directory path relative to this file -->
+            <a href="./" class="back-btn">← Back</a>
+        </div>
+
+        <div class="custom-rules-body">
+            <ul>
+                <li><strong>Goal:</strong> Scramble the puzzle, then return each colored character to the tile that matches its color.</li>
+                <li><strong>Slide &amp; Swap:</strong> Slide a character into an open tile. Whenever you move a character, its two neighbors swap places too!</li>
+                <li><strong>Pac-Man Doors:</strong> Moving off the left or right edges wraps characters around to the opposite side. (Yes, characters wrapped around opposite edges count as neighbors!)</li>
+                <li><strong>Hints:</strong> Tap the closed Eye icon to view the exact sequence of moves needed to solve the puzzle.</li>
+            </ul>
+
+            <div class="custom-rules-footer">
+                <p>Theoretical Basis:</p>
+                <a href="https://homepages.gac.edu/~jsiehler/games/slideSwap-start.html" target="_blank">
+                    Slide &amp; Swap on Cubic Graphs ↗
+                </a>
+
+                <p style="margin-top: 10px;">Audio Credit:</p>
+                <a href="https://www.youtube.com/@GoldenPalmRecorders/featured" target="_blank">
+                    Nebula, Artist: The Grey Room ↗
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
