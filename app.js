@@ -645,10 +645,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-    document.getElementById('menu-btn-info').addEventListener('click', () => {
-        initGlobalAudioContext();
-        console.log("Rules modal route opened.");
-    });
+
 
     document.getElementById('scramble-easy').addEventListener('click', () => {
         initGlobalAudioContext();
