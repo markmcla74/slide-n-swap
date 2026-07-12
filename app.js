@@ -248,7 +248,7 @@ function scrambleBoardByDifficulty(tierName) {
 // 1. Define your emoji library at the top of your file (or right above renderBoard)
 const animalEmojis = {
     0: "🐞", // RED: Lady Beetle
-    1: "🐯", // Tiger
+    1: "🦊", // ORANGE: Fox
     2: "🐥", // YELLOW: Front-Facing Baby Chick
     3: "🥶", // BLUE: Cold Face
     4: "🐢", // GREEN: Turtle
@@ -289,9 +289,10 @@ function renderBoard() {
         // If it's not the empty slot ID
         if (characterId !== 7) {
             // Check if we have an emoji mapped to this character ID
+            // Update this line inside your renderBoard function:
             if (animalEmojis[characterId] !== undefined) {
-                // Render the emoji inside a clean, centered container layout box
-                slot.innerHTML = `<span style="font-size: 4.0rem; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; user-select: none;">${animalEmojis[characterId]}</span>`;
+                // We added the 'emoji-text' class and removed the hardcoded font-size
+                slot.innerHTML = `<span class="emoji-text" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; user-select: none;">${animalEmojis[characterId]}</span>`;
             } else {
                 // Fallback to the raw ID number if an emoji isn't found
                 slot.innerText = characterId;

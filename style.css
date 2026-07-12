@@ -191,8 +191,8 @@ display: none;
     user-select: none;
 }
 
-.tile-1 { background-color: #ff5964; }
-.tile-2 { background-color: #f7b05b; }
+.tile-1 { background-color: #d32f2f; }
+.tile-2 { background-color: #ff9800; }
 .tile-3 { background-color: #f5f35c; }
 .tile-4 { background-color: #35a7ff; }
 .tile-5 { background-color: #38b000; }
@@ -384,6 +384,19 @@ touch-action: pan-y !important;
 
 .scramble-target-btn:active { transform: scale(0.85); }
 .scramble-target-btn svg { width: 100%; height: 100%; }
+
+/* 1. Mobile Baseline (Your sweet spot for phones) */
+.emoji-text {
+    font-size: 4.0rem; /* Keeps the perfect look you already love on mobile */
+    transition: font-size 0.15s ease;
+}
+
+/* 2. Desktop Boost (Pumps up the size on computers) */
+@media (min-width: 768px) {
+    .emoji-text {
+        font-size: 6.5rem; /* Substantially larger to fully occupy big desktop tiles */
+    }
+}
 
 /* Home Glow Pulsing System Rules */
 .character-slot.at-home {
