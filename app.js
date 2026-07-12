@@ -245,6 +245,17 @@ function scrambleBoardByDifficulty(tierName) {
     console.log(`Loading ${tierName} puzzle at Library Index [${randomIndex}]:`, targetScramble);
     applyLibraryState(targetScramble);
 }
+// 1. Define your emoji library at the top of your file (or right above renderBoard)
+const animalEmojis = {
+    0: "🐞", // RED: Lady Beetle
+    1: "🐯", // Tiger
+    2: "🐥", // YELLOW: Front-Facing Baby Chick
+    3: "🥶", // BLUE: Cold Face
+    4: "🐢", // LIME GREEN: Turtle
+    5: "😈", // PURPLE: Smiling Face with Horns
+    6: "👽", // GREEN: Alien (Classic alien green)
+    // 7 is skipped because it represents the empty/blank tile slot
+};
 
 function applyLibraryState(libraryEntry) {
     let rawStateArray = [];
@@ -275,10 +286,14 @@ function renderBoard() {
             targetTile.className = `tile tile-${currentTileIndex + 1}`;
         }
 
+        // If it's not the empty slot ID
         if (characterId !== 7) {
-            if (typeof animalTemplates !== 'undefined' && animalTemplates[characterId]) {
-                slot.innerHTML = animalTemplates[characterId];
+            // Check if we have an emoji mapped to this character ID
+            if (animalEmojis[characterId] !== undefined) {
+                // Render the emoji inside a clean, centered container layout box
+                slot.innerHTML = `<span style="font-size: 7.5rem; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; user-select: none;">${animalEmojis[characterId]}</span>`;
             } else {
+                // Fallback to the raw ID number if an emoji isn't found
                 slot.innerText = characterId;
             }
 

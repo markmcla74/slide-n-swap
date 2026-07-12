@@ -196,8 +196,10 @@ display: none;
 .tile-3 { background-color: #f5f35c; }
 .tile-4 { background-color: #35a7ff; }
 .tile-5 { background-color: #38b000; }
-.tile-6 { background-color: #9d4edd; }
-.tile-7 { background-color: #00f5d4; }
+.tile-6 {
+    background-color: #9c27b0;
+}
+.tile-7 { background-color: #a4b3b6; }
 .tile-empty {
     background-color: #ffffff;
     box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -391,10 +393,31 @@ touch-action: pan-y;
 .scramble-target-btn svg { width: 100%; height: 100%; }
 
 /* Home Glow Pulsing System Rules */
-.character-slot.at-home { animation: homeGlowPulse 1.6s infinite ease-in-out; }
+.character-slot.at-home {
+    /* Merges your original pulse animation with a scale and brightness transition */
+    animation: homeGlowPulse 1.6s infinite ease-in-out;
+    transition: transform 0.3s ease;
+}
+
 @keyframes homeGlowPulse {
-    0%, 100% { box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4); border-radius: 8px; }
-    50% { box-shadow: inset 0 0 26px rgba(0, 0, 0, 0.9); border-radius: 8px; }
+    0%, 100% {
+        /* Your original inner shadow */
+        box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
+        border-radius: 8px;
+
+        /* New: A crisp, sharp white outline effect to make the emoji pop */
+        filter: drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.6));
+        transform: scale(1.0);
+    }
+    50% {
+        /* Your original intense inner shadow */
+        box-shadow: inset 0 0 26px rgba(0, 0, 0, 0.9);
+        border-radius: 8px;
+
+        /* New: The glow intensifies and the emoji breathes outward slightly */
+        filter: drop-shadow(0px 0px 14px rgba(255, 255, 255, 1));
+        transform: scale(1.04);
+    }
 }
 
 /* When a jewel is active/lit during gameplay */
