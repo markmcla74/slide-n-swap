@@ -383,16 +383,23 @@ touch-action: pan-y !important;
 .scramble-target-btn:active { transform: scale(0.85); }
 .scramble-target-btn svg { width: 100%; height: 100%; }
 
-/* 1. Mobile Baseline (Your sweet spot for phones) */
+/* 1. Mobile Baseline (Perfect for Android phones) */
 .emoji-text {
-    font-size: 4.0rem; /* Keeps the perfect look you already love on mobile */
+    font-size: 4.0rem;
     transition: font-size 0.15s ease;
 }
 
-/* 2. Desktop Boost (Pumps up the size on computers) */
+/* 2. iOS Safari Target (Gently shrinks the font size just for iPhones) */
+@supports (-webkit-touch-callout: none) {
+    .emoji-text {
+        font-size: 2.8rem; /* Trimmed down so WebKit doesn't overflow the tiles */
+    }
+}
+
+/* 3. Desktop Boost (Pumps up the size on computers) */
 @media (min-width: 768px) {
     .emoji-text {
-        font-size: 8.5rem; /* Substantially larger to fully occupy big desktop tiles */
+        font-size: 8.5rem;
     }
 }
 
