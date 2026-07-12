@@ -181,7 +181,7 @@ const JEWEL_COLOR_CLASSES = [
 'jewel-blue',   // 3
 'jewel-green',  // 4
 'jewel-purple', // 5
-'jewel-teal'    // 6
+'jewel-brown'    // 6
 ];
 
 function updateJewelTrack() {
@@ -251,7 +251,7 @@ const animalEmojis = {
     1: "🐯", // Tiger
     2: "🐥", // YELLOW: Front-Facing Baby Chick
     3: "🥶", // BLUE: Cold Face
-    4: "👽", // GREEN: Alien (Classic alien green)
+    4: "🐢", // GREEN: Turtle
     5: "😈", // PURPLE: Smiling Face with Horns
     6: "🐻"  // BROWN: Bear Face
     // 7 is skipped because it represents the empty/blank tile slot
