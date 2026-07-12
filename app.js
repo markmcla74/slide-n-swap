@@ -605,23 +605,12 @@ window.addEventListener('DOMContentLoaded', () => {
     initializeMovementEngine();
 
     const overlay = document.getElementById('menu-overlay');
-    const continueBtn = document.getElementById('menu-btn-continue');
+
 
     if (isFirstLaunch) {
         overlay.classList.add('active');
-        continueBtn.innerText = "Explore";
+
     }
-
-    continueBtn.addEventListener('click', () => {
-        // ⚡️ CORE UNLOCK STEP: Wakes up the browser line on modal exit
-        initGlobalAudioContext();
-
-        overlay.classList.remove('active');
-        if (isFirstLaunch) {
-            isFirstLaunch = false;
-            continueBtn.innerText = "Continue";
-        }
-    });
 
     const eyeButton = document.getElementById('btn-eye-solution');
     eyeButton.addEventListener('click', () => {
@@ -651,22 +640,9 @@ window.addEventListener('DOMContentLoaded', () => {
         overlay.classList.add('active');
     });
 
-    document.getElementById('menu-btn-continue').addEventListener('click', () => {
-        initGlobalAudioContext();
-        isVictorySoundPlayed = false;
-        playGameMusic();
-        overlay.classList.remove('active');
-    });
 
-    document.getElementById('menu-btn-reset').addEventListener('click', () => {
-        initGlobalAudioContext();
-        boardState = [0, 1, 2, 3, 4, 5, 6, 7];
-        moveCount = 0;
-        playGameMusic();
-        renderBoard();
-        updateJewelTrack();
-        overlay.classList.remove('active');
-    });
+
+
 
     document.getElementById('menu-btn-info').addEventListener('click', () => {
         initGlobalAudioContext();
