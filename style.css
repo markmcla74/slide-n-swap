@@ -67,14 +67,22 @@ body {
     box-sizing: border-box; /* Crucial to prevent padding from expanding the calculated 2:1 box width/height */
 }
 
-/* 2x4 Grid Core */
+/* 2x4 Grid Core - Safe for both Android and iOS Safari */
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+
+    /* CHANGE: Replaced '1fr' with 'minmax(0, 1fr)'. This strips away the default
+     *      'min-content' text rule, preventing large emojis from stretching rows vertically. */
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+
     gap: 8px;
     flex: 1;
     width: 100%;
+
+    /* Explicitly force internal tile items to stretch and fill the grid boundaries fully */
+    align-items: stretch;
+    justify-items: stretch;
 }
 /* Skinny Jewel Dashboard Row - Sits right at the base with zero wasted margins */
 .jewel-dashboard-row {
@@ -391,23 +399,32 @@ touch-action: pan-y !important;
 .scramble-target-btn:active { transform: scale(0.85); }
 .scramble-target-btn svg { width: 100%; height: 100%; }
 
-/* 1. Mobile Baseline (Perfect for Android phones) */
+/* 1. Mobile Fluid Baseline (Perfect for both Android & iPhone screens)
+ *  By tying font size to the short viewport height (svh), the emojis scale
+ *  proportionally with the game container, preventing row stretching. */
 .emoji-text {
-    font-size: 4.0rem;
+    font-size: 8svh; /* Scales fluidly with the height of the layout */
+    line-height: 1;  /* Collapses text bounding boxes tightly around the character */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Safeguards touch interactions on the underlying tile */
     transition: font-size 0.15s ease;
 }
 
-/* 2. iOS Safari Target (Gently shrinks the font size just for iPhones) */
+/* 2. iOS Safari Target (Fine-tunes the iPhone bounding boxes)
+ *  iOS emojis inherently contain larger hidden baselines. If 8svh still runs
+ *  snug on small screens, this clamps it safely just for WebKit. */
 @supports (-webkit-touch-callout: none) {
     .emoji-text {
-        font-size: 2.8rem; /* Trimmed down so WebKit doesn't overflow the tiles */
+        font-size: 7.2svh;
     }
 }
 
 /* 3. Desktop Boost (Pumps up the size on computers) */
 @media (min-width: 768px) {
     .emoji-text {
-        font-size: 8.5rem;
+        font-size: 8.5rem; /* Restores your massive desktop arcade look */
     }
 }
 
