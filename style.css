@@ -436,7 +436,7 @@ touch-action: pan-y !important;
 }
 
 /* Desktop Boost */
-@media (min-width: 768px) {
+@media (min-width: 1100px) {
     .emoji-text {
         width: 70%;
         height: 70%;
