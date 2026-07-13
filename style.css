@@ -191,6 +191,7 @@ display: none;
 
 /* Base Tile Styling Elements */
 /* Base Tile Styling Elements */
+/* Base Tile Styling Elements */
 .tile {
     position: relative;
     border-radius: 8px;
@@ -201,8 +202,7 @@ display: none;
     overflow: hidden;
     user-select: none;
 
-    /* CONTAINER QUERY ENABLE: Turn each individual tile into a measurable space */
-    container-type: inline-size;
+    /* REMOVED container-type to stop Safari from guessing layout widths */
 }
 
 .tile-1 { background-color: #d32f2f; }
@@ -402,8 +402,16 @@ touch-action: pan-y !important;
  *  proportionally with the game container, preventing row stretching. */
 /* Container-Relative Emojis (Perfectly uniform across Android, iOS Safari, and Desktop) */
 /* Container-Relative Emojis */
+/* Container-Relative Emojis (Perfect, stable scaling everywhere) */
 .emoji-text {
-    font-size: 55cqmin;
+    /* Hard target: Make the text boundary box consume exactly 60% of its tile */
+    width: 60%;
+    height: 60%;
+    aspect-ratio: 1 / 1;
+
+    /* Use a fluid viewport layout fallback that plays nice inside aspect-ratio boxes */
+    font-size: 3.5rem;
+
     line-height: 1;
     display: flex;
     align-items: center;
@@ -418,19 +426,21 @@ touch-action: pan-y !important;
     transition: font-size 0.15s ease;
 }
 
-/* iOS Safari Specific Override
- *  Gently steps down the container calculation specifically for iPhones to
- *  compensate for WebKit's rendering metrics and keep the text safely inside the tile edges. */
+/* Targeted iOS Safari Tweak
+ *  If Safari still displays the font-size slightly too large inside that
+ *  60% box framework, this forces WebKit to downscale the text rendering directly. */
 @supports (-webkit-touch-callout: none) {
     .emoji-text {
-        font-size: 42cqmin; /* Trimmed down from 55 to perfectly fit Safari's bounding box */
+        font-size: 2.2rem; /* Clamps the absolute font size down inside Safari's engine */
     }
 }
 
-/* 3. Desktop Boost (Pumps up the size on computers) */
+/* Desktop Boost */
 @media (min-width: 768px) {
     .emoji-text {
-        font-size: 8.5rem; /* Restores your massive desktop arcade look */
+        width: 70%;
+        height: 70%;
+        font-size: 8.5rem;
     }
 }
 
