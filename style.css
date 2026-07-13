@@ -401,32 +401,29 @@ touch-action: pan-y !important;
  *  By tying font size to the short viewport height (svh), the emojis scale
  *  proportionally with the game container, preventing row stretching. */
 /* Container-Relative Emojis (Perfectly uniform across Android, iOS Safari, and Desktop) */
+/* Container-Relative Emojis */
 .emoji-text {
-    /* 55cqmin makes the font size exactly 55% of the shorter edge of the tile.
-     *      No more text overflowing, row blowout, or cross-browser variance. */
     font-size: 55cqmin;
-
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    /* Absolute centering protection to override baseline discrepancies */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
-    pointer-events: none; /* Safeguards touch interactions on the underlying tile */
+    pointer-events: none;
     transition: font-size 0.15s ease;
 }
 
-/* 2. iOS Safari Target (Fine-tunes the iPhone bounding boxes)
- *  iOS emojis inherently contain larger hidden baselines. If 8svh still runs
- *  snug on small screens, this clamps it safely just for WebKit. */
+/* iOS Safari Specific Override
+ *  Gently steps down the container calculation specifically for iPhones to
+ *  compensate for WebKit's rendering metrics and keep the text safely inside the tile edges. */
 @supports (-webkit-touch-callout: none) {
     .emoji-text {
-        font-size: 7.2svh;
+        font-size: 42cqmin; /* Trimmed down from 55 to perfectly fit Safari's bounding box */
     }
 }
 
