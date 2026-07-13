@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="slidenswapFeatureImage2p0.png" alt="App Feature Image" width="600">
+  <img src="slidenswapFeatureImage3p0.png" alt="App Feature Image" width="600">
 </p>
 
 https://markmcla74.github.io/slide-n-swap/
