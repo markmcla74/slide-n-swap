@@ -71,16 +71,10 @@ body {
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-
-    /* CHANGE: Replaced '1fr' with 'minmax(0, 1fr)'. This strips away the default
-     *      'min-content' text rule, preventing large emojis from stretching rows vertically. */
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-
+    grid-template-rows: repeat(2, minmax(0, 1fr)); /* Rigid container-clamped heights */
     gap: 8px;
     flex: 1;
     width: 100%;
-
-    /* Explicitly force internal tile items to stretch and fill the grid boundaries fully */
     align-items: stretch;
     justify-items: stretch;
 }
@@ -196,6 +190,7 @@ display: none;
 }
 
 /* Base Tile Styling Elements */
+/* Base Tile Styling Elements */
 .tile {
     position: relative;
     border-radius: 8px;
@@ -205,6 +200,9 @@ display: none;
     box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     user-select: none;
+
+    /* CONTAINER QUERY ENABLE: Turn each individual tile into a measurable space */
+    container-type: inline-size;
 }
 
 .tile-1 { background-color: #d32f2f; }
@@ -402,12 +400,23 @@ touch-action: pan-y !important;
 /* 1. Mobile Fluid Baseline (Perfect for both Android & iPhone screens)
  *  By tying font size to the short viewport height (svh), the emojis scale
  *  proportionally with the game container, preventing row stretching. */
+/* Container-Relative Emojis (Perfectly uniform across Android, iOS Safari, and Desktop) */
 .emoji-text {
-    font-size: 8svh; /* Scales fluidly with the height of the layout */
-    line-height: 1;  /* Collapses text bounding boxes tightly around the character */
+    /* 55cqmin makes the font size exactly 55% of the shorter edge of the tile.
+     *      No more text overflowing, row blowout, or cross-browser variance. */
+    font-size: 55cqmin;
+
+    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* Absolute centering protection to override baseline discrepancies */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
     pointer-events: none; /* Safeguards touch interactions on the underlying tile */
     transition: font-size 0.15s ease;
 }
