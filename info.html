@@ -83,6 +83,22 @@
             color: #f7b05b; /* High contrast amber highlight for core concepts */
         }
 
+        /* Nested goal image container */
+        .goal-image-container {
+            margin: 12px 0 8px 0;
+            /* Negative margin offsets bullet indent to keep the image flush with the text flow */
+            margin-left: -20px;
+        }
+
+        .goal-image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #444444;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
         /* Footer links styling */
         .custom-rules-footer {
             border-top: 1px solid #444444;
@@ -125,7 +141,12 @@
 
         <div class="custom-rules-body">
             <ul>
-                <li><strong>Goal:</strong> Scramble the puzzle, then return each colored character to the tile that matches its color.</li>
+                <li>
+                    <strong>Goal:</strong> Scramble the puzzle, then return each colored character to the tile that matches its color as shown here:
+                    <div class="goal-image-container">
+                        <img src="solvedPuzzle.png" alt="Solved Slide 'N Swap Puzzle Layout">
+                    </div>
+                </li>
                 <li><strong>Slide &amp; Swap:</strong> Slide a character into an open tile. Whenever you move a character, its two neighbors swap places too!</li>
                 <li><strong>Pac-Man Doors:</strong> Moving off the left or right edges wraps characters around to the opposite side. (Yes, characters wrapped around opposite edges count as neighbors!)</li>
                 <li><strong>Hints:</strong> Tap the closed Eye icon once to see the number of remaining moves. Tap the closed Eye icon twice to view the exact sequence of moves needed to solve the puzzle.</li>
