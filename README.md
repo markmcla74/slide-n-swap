@@ -1,78 +1,78 @@
 <p align="center">
-  <img src="slidenswapFeatureImage3p0.png" alt="Slide N Swap" width="150">
+  <img src="slidenswapFeatureImage3p0.png" alt="Slide 'N Swap Logo" width="300">
 </p>
 
 # Slide 'N Swap
 
-**A challenging puzzle game where you slide and swap characters on a 2x4 grid**
+**A challenging puzzle game where you slide and swap characters on a 2x4 grid.**
 
 [Launch Slide 'N Swap](https://markmcla74.github.io/slide-n-swap/)
 
 ---
 
-# Rules and Instructions
+## Rules and Instructions
 
 <p align="center">
-  <img src="readme1.png" alt="goal" width="400"><br>
-  <em>Scramble the puzzle, and then return it to this solved state. But the Slide and Swap mechanics make this puzzle tricky to solve!</em>
+  <img src="readme1.png" alt="Solved State" width="400"><br>
+  <em>The Goal: Scramble the puzzle and return it to this solved state. The unique slide-and-swap mechanics make finding the solution a true test of strategy!</em>
 </p>
 
 <p align="center">
-  <img src="readme2.png" alt="example 1" width="400"><br>
-  <em>Example 1: SLIDE the Purple Octopus down, and the Purple Octopus' neighbors, Orange Tiger and Blue Cold Face, SWAP positions.</em>
+  <img src="readme2.png" alt="Slide Move Example" width="400"><br>
+  <em>Example 1 — Sliding: Sliding the Purple Octopus down causes its two neighbors—the Orange Tiger and the Blue Cold Face—to swap positions.</em>
 </p>
 
 <p align="center">
-  <img src="readme3.png" alt="example 1 continued" width="400"><br>
-  <em>And this is the result of that move. The SWAPPING makes the puzzle tricky to solve!</em>
+  <img src="readme3.png" alt="Slide Move Result" width="400"><br>
+  <em>Example 1 Result: The resulting board state after the slide. Managing these paired swaps is what makes the puzzle tricky!</em>
 </p>
 
 <p align="center">
-  <img src="readme4.png" alt="example 2" width="400"><br>
-  <em>Example 2: Characters positioned on the left and right edges have neighbors via Pac-Man doors. For example, Purple Octopus' neighbors are Yellow Bird and Teal Dog. When the Purple Octopus SLIDES right, the Yellow Bird and Teal Dog SWAP positions.'</em>
+  <img src="readme4.png" alt="Pac-Man Wrap-Around Example" width="400"><br>
+  <em>Example 2 — Edge Wrapping: Characters on opposite outer edges wrap around via Pac-Man doors. Here, the Purple Octopus's neighbors are the Yellow Bird and Teal Dog.</em>
 </p>
 
 <p align="center">
-  <img src="readme5.png" alt="example 2 continued" width="400"><br>
-  <em>And this is the result of that move. The Purple Octopus moved to the right and the Yellow Bird and Teal Dog swapped positions!</em>
+  <img src="readme5.png" alt="Pac-Man Wrap-Around Result" width="400"><br>
+  <em>Example 2 Result: When the Purple Octopus slides right, it wraps to the opposite side while the Yellow Bird and Teal Dog swap places.</em>
 </p>
 
 <p align="center">
-  <img src="readme6.png" alt="help jewel led indicators" width="400"><br>
-  <em>Tap the eye icon once, and see how many moves it takes to solve the puzzle. Tap the eye icon twice to reveal the solution. In this case, the solution sliding order is: Teal Dog, Red Crab, and finally Blue Cold Face.</em>
+  <img src="readme6.png" alt="Hint System and LED Indicators" width="400"><br>
+  <em>Hint System: Tap the eye icon once to view the minimum moves required to solve. Tap twice to reveal the exact sliding sequence (e.g., Teal Dog, Red Crab, then Blue Cold Face).</em>
 </p>
 
-# Credits
- <p>Theoretical Basis:</p>
-                <a href="https://homepages.gac.edu/~jsiehler/games/slideSwap-start.html" target="_blank">
-                    Slide &amp; Swap on Cubic Graphs ↗
-                </a>
- <p style="margin-top: 10px;">Audio Credit:</p>
-                <a href="https://www.youtube.com/@GoldenPalmRecorders/featured" target="_blank">
-                    Nebula, Artist: The Grey Room ↗
-                </a>
+---
+
+## Credits
+
+* **Theoretical Basis:**  
+  [Slide &amp; Swap on Cubic Graphs ↗](https://homepages.gac.edu/~jsiehler/games/slideSwap-start.html) by Jacob Siehler
+* **Audio Credit:**  
+  *Nebula* by [The Grey Room ↗](https://www.youtube.com/@GoldenPalmRecorders/featured) via Golden Palm Recorders
 
 ---
 
 ## Install Slide 'N Swap Directly from Browser
 
-Slide 'N Swap can feel just like a native app when installed on your phone using the browser's **Add to Home Screen** or **Install App** feature.
+Slide 'N Swap is a Progressive Web App (PWA) that runs just like a native application when installed on your phone.
 
 ### 📱 iPhone — Safari
-
-Launch Slide 'N Swap. Tap the **Share** button, scroll down, and tap **Add to Home Screen**.  
-[Launch Slide 'N Swap](https://markmcla74.github.io/slide-n-swap/)
+1. Launch [Slide 'N Swap](https://markmcla74.github.io/slide-n-swap/).
+2. Tap the **Share** button in the browser menu.
+3. Scroll down and tap **Add to Home Screen**.
 
 ### 🤖 Android — Chrome
+1. Launch [Slide 'N Swap](https://markmcla74.github.io/slide-n-swap/).
+2. Tap the **three-dot menu** in the top right corner.
+3. Tap **Add to Home Screen** or **Install App**.
 
-Launch DeepHz. Tap the **three dots** in the top right, then tap **Add to Home Screen** or **Install app**.  
-[Launch Slide 'N Swap](https://markmcla74.github.io/slide-n-swap/)
-
-Once installed, Slide 'N Swap has its own icon on your home screen and can be launched like any other app.
+Once installed, Slide 'N Swap will feature its own home screen icon and launch seamlessly like any other app.
 
 ---
 
 ## 🚀 Get More Free Apps
-You are welcome to download this app, or any of my other apps, from the Google Play Store. All of my apps are **free, and none of them contain ads**.
+
+You are welcome to download this app, or any of my other applications, directly from the Google Play Store. All of my apps are **100% free with zero ads**.
 
 [Browse all apps by markmcla on the Google Play Store](https://play.google.com/store/search?q=markmcla&c=apps)
