@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="slidenswapFeatureImage3p0.png" alt="Slide 'N Swap Logo" width="300">
+  <img src="slidenswapFeatureImage3p0.png" alt="Slide 'N Swap Logo" width="400">
 </p>
 
 # Slide 'N Swap
@@ -34,7 +34,7 @@
 
 <p align="center">
   <img src="readme5.png" alt="Pac-Man Wrap-Around Result" width="400"><br>
-  <em>Example 2 Result: When the Purple Octopus slides right, it wraps to the opposite side while the Yellow Bird and Teal Dog swap places.</em>
+  <em>Example 2 Result: When the Purple Octopus slides right, the Yellow Bird and Teal Dog swap places.</em>
 </p>
 
 <p align="center">
